@@ -1,0 +1,480 @@
+@model DRS.Models.DocumentVersion
+
+@{
+    ViewData["Title"] = "Add Document";
+}
+
+<partial name="~/Views/LawCategory/_LawCategoryPartial.cshtml" model="new DRS.Models.LawCategory()" />
+<partial name="~/Views/Ministry/_MinistryPartial.cshtml" model="new DRS.Models.Ministry()" />
+
+<div class="wrapper">
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="">Add Document</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+                        <li class="breadcrumb-item">Document</li>
+                        <li class="breadcrumb-item">Add Document</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+        <!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="pb-4 d-flex justify-content-end">
+                    <a asp-controller="Document" asp-action="Index">
+                        <button type="" class="btn buttonCustom2">Show All Documents</button>
+                    </a>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        
+
+                        <form id="documentForm" asp-action="Create" method="post" enctype="multipart/form-data">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label asp-for="Document.CategoryId" class="control-label">
+                                            Select Category
+                                        </label>
+                                        <select id="CategoryId" asp-for="Document.CategoryId" class="form-control"
+                                            asp-items="@ViewBag.CategoryId"></select>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label asp-for="Document.SubcategoryId" class="control-label">
+                                            Select Sub Category
+                                        </label>
+                                        <select asp-for="Document.SubcategoryId" id="SubcategoryId" class="form-control "
+                                            asp-items="@ViewBag.SubcategoryId"></select>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label asp-for="Document.Status" class="control-label"></label>
+
+                                        <select asp-for="Document.Status" class="form-control">
+                                            <option value="Enforced">Enforced</option>
+                                            <option value="Repealed">Repealed</option>
+
+                                        </select>
+
+                                        <span asp-validation-for="Document.Status" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div id="actsdiv" class="col-md-12" style="display: none;">
+                                    <div class="form-group">
+                                        <label for="ddlActs" data-bs-toggle="tips" data-bs-placement="top"
+                                            title="Select Acts">Acts:</label>
+                                        <select asp-for="type.Acts" id="ddlActs" name="Acts"
+                                            class="form-control border border-success">
+                                            <option value="">-- Select --</option>
+                                            @foreach (var item in ViewBag.Acts)
+                                            {
+                                                <option value="@item.Value">@item.Text</option>
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div id="rulesdiv" class="col-md-12" style="display: none;">
+                                    <div class="form-group">
+                                        <label for="ddlRules" data-bs-toggle="tips" data-bs-placement="top"
+                                            title="Select Rules">Rules:</label>
+                                        <select asp-for="type.Rules" id="ddlRules" name="Rules"
+                                            class="form-control border border-success">
+                                            <option value="">-- Select --</option>
+                                            @foreach (var item in ViewBag.Rules)
+                                            {
+                                                <option value="@item.Value">@item.Text</option>
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div id="ordinancesdiv" class="col-md-12" style="display: none;">
+                                    <div class="form-group">
+                                        <label for="ddlOrdinances" data-bs-toggle="tips" data-bs-placement="top"
+                                            title="Select Ordinances">Ordinances:</label>
+                                        <select asp-for="type.Ordinance" id="ddlOrdinances" name="Ordinance"
+                                            class="form-control border border-success">
+                                            <option value="">-- Select --</option>
+                                            @foreach (var item in ViewBag.Ordinances)
+                                            {
+                                                <option value="@item.Value">@item.Text</option>
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+
+
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="Document.DocTitle" class="control-label">Document Title</label>
+                                        <input asp-for="Document.DocTitle" class="form-control" required/>
+                                        @* <input id="DocId" name="DocId" value="@Model.DocId" /> *@
+                                        <span asp-validation-for="Document.DocTitle"  class="text-danger"></span>
+                                    </div>
+                                </div>
+                            
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label asp-for="Document.Srono" class="control-label">Number</label>
+                                        <input asp-for="Document.Srono" class="form-control" />
+                                        <span asp-validation-for="Document.Srono" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label asp-for="Document.PublishingDate" class="control-label">
+                                            Publishing Date
+                                        </label>
+                                        <input asp-for="Document.PublishingDate" class="form-control" type="date" asp-format="{0:dd-MM-yy}" required />
+                                        <input required asp-for="Document.CreatedDate" value="@DateTime.Now" type="hidden"
+                                            class="form-control" asp-format="{0:dd-MM-yyyy}" />
+                                        <span asp-validation-for="Document.PublishingDate" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row align-items-end">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label asp-for="Document.DdlMinistries"
+                                            class="control-label d-flex justify-content-between align-items-center">
+                                            Select Ministry
+                                            <button type="button" class="btn btn-sm buttonCustom" data-toggle="modal"
+                                                data-target="#ministryModal">
+                                                +
+                                            </button>
+                                        </label>
+                                        <select asp-for="Document.DdlMinistries" class="form-control"
+                                            asp-items="@ViewBag.Ministries"></select>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label asp-for="Document.SubDepartment" class="control-label">Sub Department</label>
+                                        <input asp-for="Document.SubDepartment" class="form-control" />
+                                        <span asp-validation-for="Document.SubDepartment" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label asp-for="Document.DdlMinistries"
+                                            class="control-label d-flex justify-content-between align-items-center">
+                                            Select Law Category
+                                            <button type="button" class="btn btn-sm buttonCustom" data-toggle="modal"
+                                                data-target="#lawCategoryModal">
+                                                +
+                                            </button>
+                                        </label>
+                                        <select asp-for="Document.DdlLawcategory" class="form-control"
+                                            asp-items="@ViewBag.LawCategories"></select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label asp-for="Document.CommencementDate" class="control-label"></label>
+                                        <input asp-for="Document.CommencementDate" class="form-control" />
+                                        <span asp-validation-for="Document.CommencementDate" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-3" id="Validity">
+                                    <div class="form-group">
+                                        <label asp-for="Document.Validity" class="control-label"></label>
+                                        <input asp-for="Document.Validity" class="form-control"  />
+                                        <span asp-validation-for="Document.Validity" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label asp-for="Document.RepealedBy" class="control-label"></label>
+                                        <input asp-for="Document.RepealedBy" class="form-control" />
+                                        <span asp-validation-for="Document.RepealedBy" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <label data-bs-toggle="tips" data-bs-placement="top"
+                                        title="Security Level of Document">Security Level:</label>
+                                    <div class="form-group ">
+                                        <select name="SecurityLevel" id="SecurityLevel" asp-for="Document.SecurityLevel"
+                                            class=" form-control border border-danger">
+                                            <option value="Pubic">Pubic</option>
+                                            <option value="Private">Private</option>
+                                            <option value="Restricted">Restricted</option>
+
+                                        </select>
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                            <div class="row d-flex justify-content-center pt-3">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <div class="d-inline">
+                                            <input type="checkbox" id="checkboxGazette">
+                                            <label for="checkboxGazette" data-bs-toggle="tips" data-bs-placement="top"
+                                                title="Please Check Gazette if Document Source is Gazette">
+                                                &nbsp; Gazette
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <div class="d-inline">
+                                            <input type="checkbox" id="checkboxBook">
+                                            <label for="checkboxBook" data-bs-toggle="tips" data-bs-placement="top"
+                                                title="Please Check Book if Document Source is Book">
+                                                &nbsp; Book
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <div class="d-inline">
+                                            <input type="checkbox" id="checkboxpakcode">
+                                            <label for="checkboxpakcode" data-bs-toggle="tips" data-bs-placement="top"
+                                                title="Please Check Pakistan Code if Document Source is Pakistan Code">
+                                                &nbsp; Pakistan Code
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row" id="pakcode" style="display: none;">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label class="control-label">City</label>
+                                        <input class="form-control" />
+                                        <span class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Pakistan Code Volume No:</label>
+                                        <input asp-for="Document.Volume" class="form-control"/>
+                                        <span asp-validation-for="Document.Volume" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Pakistan Code Volume Page No:</label>
+                                        <input asp-for="Document.PageNo" class="form-control" />
+                                        <span asp-validation-for="Document.PageNo" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="row" id="bookRow" style="display: none;">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label asp-for="Document.BookNoNew" class="control-label">Book No New</label>
+                                        <input asp-for="Document.BookNoNew" class="form-control" />
+                                        <span asp-validation-for="Document.BookNoNew" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label asp-for="Document.BookNoOld" class="control-label">Book No Old</label>
+                                        <input asp-for="Document.BookNoOld" class="form-control" />
+                                        <span asp-validation-for="Document.BookNoOld" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label asp-for="Document.BookPageNo" class="control-label">Book Page No:</label>
+                                        <input asp-for="Document.BookPageNo" class="form-control" />
+                                        <span asp-validation-for="Document.BookPageNo" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="row" id="gazetteRow" style="display: none;">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label asp-for="Document.GazetteYear" class="control-label">Gazette Year</label>
+                                        <input asp-for="Document.GazetteYear" class="form-control" required/>
+                                        <span asp-validation-for="Document.GazetteYear" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label asp-for="Document.GazettePart" class="control-label">Gazette Part</label>
+                                        <input asp-for="Document.GazettePart" class="form-control" />
+                                        <span asp-validation-for="Document.GazettePart" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label asp-for="Document.GazettePageNo" class="control-label">Gazette Page No:</label>
+                                        <input asp-for="Document.GazettePageNo" class="form-control" />
+                                        <span asp-validation-for="Document.GazettePageNo" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label asp-for="Document.Remarks" class="control-label"></label>
+                                        <input asp-for="Document.Remarks" class="form-control" />
+                                        <span asp-validation-for="Document.Remarks" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label class="form-label" for="fileUpload">Choose Document for Upload</label>
+                                        <input type="file"  class="form-control" id="fileUpload" name="DocumentFile" required/>
+                                        <span asp-validation-for="Document.DocUrl" class="text-danger"></span>
+
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="d-flex justify-content-center pt-3">
+                                <button type="submit" action="Create" class="btn buttonCustom">Add Document</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            </div>
+    </section>
+    @* <partial name="_pager" model="@pager" /> *@
+</div>
+
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <partial name="_ValidationScriptsPartial" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#actsdiv').hide();
+            $('#rulesdiv').hide();
+            $('#ordinancesdiv').hide();
+            
+
+            // Event handler for Subcategory dropdown change
+            $('#SubcategoryId').change(function () {
+                var selectedOption = $(this).find(':selected'); // Get the selected option
+                var selectedName = selectedOption.text(); // Get the text of the selected option
+
+                $('#actsdiv').slideUp();
+                $('#rulesdiv').slideUp();
+                $('#ordinancesdiv').slideUp();
+                $('#Validity').hide();
+                if (selectedName == 'Ordinance') {
+                    $('#actsdiv').slideDown();
+                    $('#rulesdiv').slideDown();
+                    $('#Validity').show();
+                } else if (selectedName == 'Act') {
+                    $('#ordinancesdiv').slideDown();
+                    $('#rulesdiv').slideDown();
+                } else if (selectedName == 'Rules') {
+                    $('#actsdiv').slideDown();
+                    $('#ordinancesdiv').slideDown();
+                }
+            });
+
+           
+            $('#checkboxGazette').change(function () {
+                if ($(this).is(":checked")) {
+                    $('#gazetteRow').slideDown();
+                } else {
+                    $('#gazetteRow').slideUp();
+                }
+            });
+
+            $('#checkboxpakcode').change(function () {
+                if ($(this).is(":checked")) {
+                    $('#pakcode').slideDown();
+                } else {
+                    $('#pakcode').slideUp();
+                }
+            });
+
+            $('#checkboxBook').change(function () {
+                if ($(this).is(":checked")) {
+                    $('#bookRow').slideDown();
+                } else {
+                    $('#bookRow').slideUp();
+                }
+            });
+
+            $('#CategoryId').change(function () {
+                var categoryId = $(this).val();
+                $.ajax({
+                    url: '/Document/GetSubcategoriesByCategoryId',
+                    type: 'GET',
+                    data: { categoryId: categoryId },
+                    success: function (response) {
+                        var subcategoryDropdown = $('#SubcategoryId');
+                        subcategoryDropdown.empty();
+                        $.each(response, function (index, item) {
+                            subcategoryDropdown.append($('<option></option>').val(item.subcategoryId).text(item.subcategoryName));
+                        });
+                    },
+                    error: function (xhr, status, error) {
+                        console.log(error);
+                    }
+                });
+            });
+
+            $('[data-bs-toggle="tips"]').tooltip();
+        });
+
+        $(document).ready(function () {
+            $('.select2').select2();
+        });
+
+        function showLawCategory() {
+            $("#lawCategoryModal").modal("show");
+        }
+    </script>
+
+
+
+}

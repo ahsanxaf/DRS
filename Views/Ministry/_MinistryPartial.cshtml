@@ -1,0 +1,27 @@
+﻿@model DRS.Models.Ministry
+
+<div class="modal" id="ministryModal" tabindex="-1" role="dialog" aria-labelledby="ministryModelLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="ministryModelLabel">Create Ministry</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form asp-action="Create" method="post" asp-controller="Ministry">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="MinistryName" class="control-label">Ministry Name</label>
+                        <input asp-for="MinistryName" class="form-control" />
+                        <span asp-validation-for="MinistryName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group d-flex justify-content-center pt-3">
+                        <input type="submit" value="Create" class="btn buttonCustom" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

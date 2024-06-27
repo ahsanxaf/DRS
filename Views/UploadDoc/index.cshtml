@@ -1,0 +1,560 @@
+﻿
+        <link href="~plugins/icheck-bootstrap/icheck-bootstrap.css" rel="stylesheet" />
+          <style>
+            .select2-container .select2-selection--single {
+               border-color: lightgreen !important; 
+                height: 37px !important;            
+            }
+            .btn-circle-smaller {
+                width: 25px; 
+                height: 25px; 
+                font-size: 16px; 
+                border-radius: 30%; 
+                padding: 0;
+                line-height: 1; 
+                }
+        </style>
+<script type="text/javascript">
+function ShowImagePreview() {
+    var input = document.getElementById('<%= titleimage.ClientID %>'); // Get the FileUpload control
+    var imagePreview = document.getElementById('<%= imagePreview.ClientID %>'); // Get the Image control
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        reader.onload = function (e) {
+            imagePreview.src = e.target.result; // Set the ImageUrl on the server-side control
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+
+  
+
+  $(document).ready(function () {
+    toggleInputBox(); // Call the function when the document is ready
+    toggleforRules();
+
+    // Add an event listener to the select element so that the function is called when the select value changes
+    $('#<%= AmdtPrinciple.ClientID %>').change(function () {
+        toggleInputBox();
+    });
+
+    $('#<%= ddlSubcategory.ClientID %>').change(function () {
+        toggleforRules();
+    });
+});
+ 
+    function toggleforRules() {
+    var selectedValue = $('#<%= ddlSubcategory.ClientID %> option:selected').val();
+        var acts = $('#actsdiv');
+
+    if (selectedValue === "3012") {
+        acts.slideDown();
+    } else {
+        acts.slideUp();
+    }
+}
+
+
+function toggleInputBox() {
+    var selectedValue = $('#<%= AmdtPrinciple.ClientID %> option:selected').val();
+    var amendantDiv = $('#AmendantDiv');
+
+    if (selectedValue === "Principle") {
+        amendantDiv.slideUp();
+    } else {
+        amendantDiv.slideDown();
+    }
+}
+
+    $(document).ready(function () {
+        $("#actsdiv").slideUp();
+        $("#ddlSubcategory").onchange(function () {
+       
+            if ($("#ddlSubcategory").val() == "3012") {
+                $("#actsdiv").slideDown();
+            } else {
+                $("#actsdiv").slideUp();
+            }
+        });
+
+
+
+           $("#checkboxbooks").change(function () {
+               if (this.checked) {
+                   $("#books").slideDown();
+               } else {
+                   $("#books").slideUp();
+               }
+           // Check if both checkboxes are checked, and show both divs if true
+               if ($("#checkboxbooks").is(":checked") && $("#checkboxgazette").is(":checked")) {
+                   $("#books").slideDown();
+                   $("#gazette").slideDown();
+               }
+           });
+           $("#checkboxgazette").change(function () {
+               if (this.checked) {
+                   $("#gazette").slideDown();
+               } else {
+                   $("#gazette").slideUp();
+               }
+               // Check if both checkboxes are checked, and show both divs if true
+               if ($("#checkboxbooks").is(":checked") && $("#checkboxgazette").is(":checked")) {
+                   $("#books").slideDown();
+                   $("#gazette").slideDown();
+               }
+           });
+           // Initialize checkboxes and divs
+           $("#checkboxbooks").prop("checked", false);
+           $("#checkboxgazette").prop("checked", false);
+           $("#books").slideUp();
+           $("#gazette").slideUp();
+});
+$(".custom-file-input").on("change", function () {
+    var fileName = $(this).val().split("\\").pop();
+    $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+});
+
+function ShowUserDetails(docTitle, msg) {
+    document.getElementById("modalName").textContent = docTitle;
+    document.getElementById("modalmsg").textContent = msg;
+
+    $('#userDetailsModal').modal('show');
+}
+
+function showLawCategory() {
+
+    $("#lawCategoryModal").modal("show");
+}
+function showMinistry() {
+
+    $("#ministryModal").modal("show");
+}
+$(document).ready(function () {
+    // Initialize Select2 only once
+    $('.select').select2();
+});
+</script>
+
+<link href="plugins/select2/css/select2.min.css" rel="stylesheet" />
+<script src="plugins/select2/js/select2.min.js"></script>
+
+
+<!-- Popup Modal for Law Category -->
+<div id="lawCategoryModal" class="modal"  tabindex="-1" role="dialog" aria-labelledby="lawCategoryModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+       <div class="modal-header">
+           <h5 class="modal-title">Law Category</h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+             <div class="modal-body">
+               <label for="txtNewLawCategoryName">Law Category Name</label>
+                       <div class="form-group">
+            <input class="form-control" id="txtNewLawCategoryName" runat="server">
+                        </div>
+                 </div>
+      <div class="modal-footer">
+       <Button class="btn btn-success" id="Button3" runat="server" Text="Save Changes" OnClick="btnInsert_Click2" />
+      <button type="button" class="btn btn-secondary" data-dismiss="modal">close</button>
+      </div>
+              </div>
+  </div>
+</div>
+<!-- Popup Modal for Add Ministry -->
+<div id="ministryModal" class="modal"  tabindex="-1" role="dialog" aria-labelledby="ministryModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add New Ministry/Division</h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+               <label for="txtNewMinistryName">Ministry/Division Name</label>
+                  <div class="form-group">
+                  <input class="form-control" id="txtNewMinistryName" runat="server">
+                  </div>
+                 </div>
+              <div class="modal-footer">
+               <Button class="btn btn-success" id="AddMinistry" runat="server" Text="Save Changes" OnClick="btnInsert_Click1" />
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">close</button>
+              </div>
+       </div>
+     </div>
+</div>
+
+<!-- Popup Modal for Show Doc  Status-->
+<div id="userDetailsModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Document Details</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col">
+                        <p><strong></strong> <span id="modalName"></span>
+                            <strong> <span id="modalmsg"></span></strong></p>
+                        </div>
+                    </div>
+                           <h4>Did You want to upload more Document?</h4>                     
+            </div>
+            <div class="modal-footer">
+                <LinkButton id="LinkButton1" class="btn btn-default" runat="server" OnClick="Yes_Click">Yes</LinkButton>
+                 <LinkButton id="LinkButton2" class="btn btn-default" runat="server" OnClick="No_Click">No</LinkButton>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+    </div>
+
+
+
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 class="m-0">Upload Documents</h1>
+          </div><!-- /.col -->
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a runat="server" href="~/">Home</a></li>
+              <li class="breadcrumb-item active">Upload Documents</li>
+            </ol>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+     
+
+  <section class="content">
+      <div class="container-fluid">
+
+
+    <!-- Sign Up User -->
+    <div class="row">
+             <div class="col-md-10 mx-auto">
+                <div class="card">
+                   <div class="card-body">
+                      <div class="row">
+                         <div class="col-3">          </div>
+                          <div class="col-6">
+                              <Label id="Labelmsg" runat="server" Text="" class="success-message"></Label> 
+                               <Label id="Label1" runat="server" Text="" ></Label>
+                          </div>
+                          <div class="col-3">          </div>
+                      </div>
+                       <div class="row">
+                           <div class="col">
+                            </div>
+                       </div>
+                          <div class="row">
+                         <div class="col-md-6">
+                            <label>Select Category</label>
+                            <div class="form-group"><!-- dropdown with the categories -->
+                       <select class="form-control border border-success" id="ddlCategory" runat="server" AutoPostBack="true" OnSelectedIndexChanged="ddlCategory_SelectedIndexChanged">
+                        </select>                                                 
+                             </div>
+                         </div>
+                               
+                         <div class="col-md-4">
+                            <label>Select Sub Category</label>
+                            <div class="form-group"> <!-- dropdown with the subcategories based on the selected category -->
+                                        <select class="form-control border border-success" id="ddlSubcategory" runat="server" ClientIDMode="Static" onclick="toggleforRules()">
+</select>
+
+                            </div>
+                         </div>
+
+                            <div class="col-md-2">
+                                <label for="Status">Status</label>
+                                <div class="form-group">
+                                    <select class="form-control border border-success" id="Status" runat="server" placeholder="Select Status">
+                                        <option value="Enforced">Enforced</option>
+                                        <option value="Repealed">Repealed</option>
+                                    </select>
+                                </div>
+                            </div>
+
+
+                      </div>
+                       <div class="row-md-6" id="actsdiv">
+                                        <label for="ddlActs" data-bs-toggle="tips" data-bs-placement="top" title="Select Acts">Acts: 
+                                </label>
+                                        <div class="form-group ">
+                                            <select id="ddlActs" runat="server" class="select form-control border border-success">
+                                            </select>
+                                        </div>
+                              </div>
+                        <div class="row">
+                         <div class="col-md-6">
+                            <label data-bs-toggle="tips" data-bs-placement="top" title="Title of This Document/Law">Title: *</label>
+                            <div class="form-group">
+                                <input class="form-control border border-success" id="DocTitle" runat="server" >
+                                
+                            </div>
+                         </div>
+                         <div class="col-md-2">
+                            <label data-bs-toggle="tips" data-bs-placement="top" title="Publishing Year of This Document/Law">Year:</label>
+                            <div class="form-group">
+                               <input class="form-control border border-success" id="Year" runat="server" placeholder="Year" >
+                            </div>
+                         </div>
+                         <div class="col-md-2">
+                             <label data-bs-toggle="tips" data-bs-placement="top" title="SRO Number, Act Number, Roules Number etc "> Number</label>
+                            <div class="form-group">
+                               <input class="form-control border border-success" id="SRONo" runat="server" placeholder="Number" >
+
+                            </div>
+                         </div>
+
+                            <div class="col-md-2">
+                            <label>Publishing Date</label>
+                            <div class="form-group ">
+                                <input type="date" class="form-control border border-success" id="PublishingDate" runat="server" TextMode="Date" >
+                                
+                            </div>
+                         </div>
+
+                      </div>
+                    
+                         
+                                         
+                           <div class="row">
+                             <div class="col-md-4">
+                                        <label for="ddlMinistries" data-bs-toggle="tips" data-bs-placement="top" title="Select Ministry and Division">Ministry/Division:  
+                                            @* <Button id="btnOpenModal" runat="server" Text="+" OnClientClick="showMinistry(); return false;" class="btn btn-primary btn-circle btn-circle-smaller"/> *@
+                                </label>
+                                        <div class="form-group ">
+                                            <select id="ddlMinistries" runat="server" class="select form-control border border-success">
+                                            </select>
+                                        </div>
+                              </div>
+
+                               <div class="col-md-4">
+                                <label for="SubDepartment" data-bs-toggle="tips" data-bs-placement="top" title="Please Enter Sub-Department">Sub-Department:</label>
+                                      <div class="form-group">                     
+                                        <input class="form-control border border-success" id="SubDepartment" runat="server" placeholder="Sub Department" >
+                                      </div>            
+                              </div>  
+                               <div class="col-md-4">
+                                        <label for="ddllawcategory" data-bs-toggle="tips" data-bs-placement="top" title="Please Select Category of Law">Law Category:
+
+                                </label>                                    
+                                @* <button type="button" id="Button2" Text="+" OnClientClick="showLawCategory(); return false;" class="btn btn-primary btn-circle btn-circle-smaller" />+<button /> *@
+
+                                        <div class="form-group ">
+                                            <select  id="ddlLawcategory" class="select form-control border border-success">
+
+                                            </select>
+                                        </div>
+                                    </div>                   
+           
+                </div>
+<div class="row">
+                          <div class="col-md-3">
+                            <label data-bs-toggle="tips" data-bs-placement="top" title="Commencement Date of This Document/Law">Commencement Date: </label>
+                            <div class="form-group ">
+                               <input class="form-control border border-success" id="CommencementDate" runat="server" placeholder="Commencement Date" TextMode="Date">
+                            </div>
+                         </div>
+                         <div class="col-md-2">
+                            <label data-bs-toggle="tips" data-bs-placement="top" title="validity Date of This Document/Law">Validity: </label>
+                            <div class="form-group ">
+                               <input class="form-control border border-success" id="Validity" runat="server" placeholder="Validity" TextMode="Date">
+                            </div>
+                         </div>
+                        <div class="col-md-2">
+                            <label data-bs-toggle="tips" data-bs-placement="top" title="Security Level of Document">Security Level:</label>
+                                  <div class="form-group ">
+                                            <select class="form-control border border-danger" id="SecurityLevel" runat="server"  >
+                                                <option Text="Pubic" Value="Pubic" />
+                                                <option Text="Private" Value="Private" />
+                                                <option Text="Restricted" Value="Restricted" />
+                                            </select>
+                                        </div>
+                           </div>                       
+                        <div class="col-md-2">
+                            <label>RepealedBy</label>
+                            <div class="form-group">
+                               <input class="form-control border border-success" id="RepealedBy" runat="server" placeholder="RepealedBy" >
+                            </div>
+                         </div>
+                         <div class="col-md-3">
+                            <label data-bs-toggle="tips" data-bs-placement="top" title="Select Nature of Document">Nature of Document:</label>
+                                         <div class="form-group">
+                                            <select class="form-control border border-success" id="AmdtPrinciple" runat="server" onclick="toggleInputBox()" >
+                                                <option Text="Principle" Value="Principle" />
+                                                <option Text="Amendant" Value="Amendant" />
+                                                <option Text="Repealing" Value="Repealing" />
+                                                </select>
+                                        </div>
+                           </div>
+  </div>
+<!-- Row for Targit Subcategory Type and Search Document Title -->
+   <div class="row rounded bg-secondary text-white" id="AmendantDiv" >
+                          <div class="col-4">
+                               <label data-bs-toggle="tips" data-bs-placement="top" title="Targit Subcategory Type">Targit Subcategory Type:</label>
+                                    <div class="form-group">
+                                        <select id="targetSubCategory" runat="server" class=" form-control " AutoPostBack="true" OnSelectedIndexChanged="GetDocTiltle">
+                                        </select>
+                                    </div>
+                          </div>
+                           <div class="col-8">
+                               <div class="form-group">
+                                        <label for="ddlDocument" data-bs-toggle="tips" data-bs-placement="top" title="Search Document Title">Search Document Title:</label>
+                                        <select id="targetSearchDocument" runat="server" class="form-control select">
+                                        </select>
+                               </div>
+                        </div>
+                           
+    </div>
+
+ <div class="row">
+     <div class="col-md-2">
+                            <label>City:</label>
+                            <div class="form-group">
+                               <input class="form-control border border-success" id="City" runat="server" placeholder="City" >
+                            </div>
+      </div>
+                      <div class="col-md-5">
+                            <label>Pakistan Code Volume No:</label>
+                            <div class="form-group">
+                               <input class="form-control border border-success" id="Volume" runat="server" placeholder="Volume No" >
+                            </div>
+                         </div>
+                       <div class="col-md-5">
+                            <label>Pakistan Code Volume Page No:</label>
+                            <div class="form-group">
+                               <input class="form-control border border-success" id="VolumePageNo" runat="server" placeholder="Volume Page No" >
+                            </div>
+                       </div>
+     </div>
+<!-- Row for Uploded Source -->
+    <div class="row">
+                <div class="col-2">
+                 <div class="form-group">
+                 <label data-bs-toggle="tips" data-bs-placement="top" title="Upload from the Source">
+                    Uploaded Source:
+                                </label>
+                     </div>
+                 </div>
+                <div class="col-1">
+                    <div class="form-group">      
+                        <div class="icheck-success d-inline" >
+                        <input type="checkbox"  id="checkboxbooks" />
+                        <label for="checkboxbooks" data-bs-toggle="tips" data-bs-placement="top" title="Please Check Book if Document Source is Book">
+                            Books
+                        </label>
+                        </div>
+                      </div>
+                </div>
+                 <div class="col-1">
+                      <div class="form-group">
+                                        <div class="icheck-success d-inline">
+                                        <input type="checkbox"  id="checkboxgazette" />
+                                        <label for="checkboxgazette" data-bs-toggle="tips" data-bs-placement="top" title="Please Check Gazette if Document Source is Gazette">
+                                          Gazette
+                                        </label>
+                                      </div>
+                          </div>
+                 </div>
+    
+    </div>
+<!-- Row for Book -->
+             <div class="row" id="books">
+                         <div class="col-md-4">
+                            <label data-bs-toggle="tips" data-bs-placement="top" title="Book No New">Book No New</label>
+                            <div class="form-group">
+                               <input class="form-control" id="BookNoNew" runat="server" placeholder="Book No New" >
+                            </div>
+                         </div>
+                         <div class="col-md-4">
+                            <label data-bs-toggle="tips" data-bs-placement="top" title="Book No Old">Book No Old</label>
+                            <div class="form-group">
+                               <input class="form-control" id="BookNoOld" runat="server" placeholder="Book No Old" >
+                            </div>
+                         </div>
+                           <div class="col-md-4">
+                            <label data-bs-toggle="tips" data-bs-placement="top" title="Book Page No">Book Page No:</label>
+                            <div class="form-group">
+                               <input class="form-control" id="BookPageNo" runat="server" placeholder="Book Page No">
+                            </div>
+                         </div>
+                  </div>
+<!-- Row for Gazette -->
+              <div class="row" id="gazette">
+                         <div class="col-md-4">
+                            <label>Gazette Year</label>
+                            <div class="form-group">
+                               <input class="form-control" id="GazetteYear" runat="server" placeholder="Gazette Year" >
+                            </div>
+                         </div>
+                         <div class="col-md-4">
+                            <label>Gazette Part</label>
+                            <div class="form-group">
+                               <input class="form-control" id="GazettePart" runat="server" placeholder="Gazette Part" >
+                            </div>
+                         </div>
+                           <div class="col-md-4">
+                            <label>Gazette Page No:</label>
+                            <div class="form-group">
+                               <input class="form-control" id="GazettePageNo" runat="server" placeholder="Gazette Page No">
+                            </div>
+                         </div>
+                      </div>
+<!-- Row for Remarks --> 
+             <div class="row">
+                         <div class="col-md-12">
+                            <label>Remarks:</label>
+                            <div class="form-group">
+
+                               <input class="form-control border border-success" id="Remarks" runat="server"  placeholder="Enter Remarks Here" TextMode="MultiLine" Rows="2">
+                       
+                                 </div>
+                         </div>
+                        </div>
+
+              <div class="row">
+                                    <div class="col-4">
+                                <div class="btn btn-primary">
+                                    <label class="form-label text-white" for="fileUpload">Choose Document for Upload</label>
+                                    <input type="file" id="fileUpload" class="form-control" />
+                                </div>
+
+                                    </div>
+                                    <div class="col-4">
+                                <div class="btn btn-primary">
+                                    <label class="form-label text-white" for="titleimage">Choose Title Image</label>
+                                    <input type="file" id="titleimage" class="form-control" onchange="ShowImagePreview();" />
+                                </div>
+
+                                    </div>
+                                    <div class="col-4">
+                                        <Image id="imagePreview"  class="img-thumbnail" ImageUrl="~/img/noimage.png" Width="220" Height="80" />
+                                    </div>
+                       </div>                     
+                       <br />
+
+                      <div class="row">
+                  
+                          <div class="col-12"> 
+                            <div class="form-group" >
+
+                                    <button type="button" class="btn btn-success btn-block" id="btnUpload" OnClick="btnUpload_Click" />Upload File<button/>
+                            </div>
+                          </div>
+                      </div>
+                   </div>
+                
+             </div>
+    </div> 
+      
+       </div>
+
+ </div> 
+</section> 
+
+
+

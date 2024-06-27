@@ -1,0 +1,258 @@
+@model AmendmentViewModel
+
+
+<style>
+
+    .version-buttons {
+        display: flex;
+        overflow-x: auto; /* Enable horizontal scrolling */
+        white-space: nowrap; /* Prevent wrapping of buttons */
+    }
+
+        .version-buttons .col-md-1 {
+            flex: 0 0 auto; /* Ensure columns do not grow */
+            margin-right: 5px; /* Adjust spacing between buttons */
+        }
+</style>
+
+<div class="wrapper">
+    <section class="content-header">
+        <!-- Header section content -->
+    </section>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <!-- Display buttons for versions -->
+                <input type="hidden" id="DocId" value="@ViewBag.DocId"></input>
+                <div class="col-md-12 version-buttons" data="">
+                    <!-- Buttons for versions will be dynamically added here -->
+                </div>
+            </div>
+
+            <!-- Add Amendment Form -->
+            <div class="row">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                        </div>
+                        <h3 class="card-title">Amendment Details</h3>
+                    </div>
+                    <div class="card-body">
+                        <form id="amendmentForm" method="post" action="@Url.Action("Create", "Amendment")">
+                            @Html.AntiForgeryToken()
+
+                            <!-- Hidden fields for submission -->
+                            <input type="hidden" id="hdnVersionId" name="VersionId" />
+                            <input type="hidden" id="hdnDocId" name="DocId" />
+
+                            <!-- Version Number (displayed, not editable) -->
+                            <div class="form-group row">
+                                <label for="ddlVersionNo" class="col-sm-3 col-form-label">Amendment No:</label>
+                                <div class="col-sm-9">
+                                    <input asp-for="NewAmendment.VersionNo" type="text" id="ddlVersionNo" name="VersionNo" class="form-control" readonly />
+                                </div>
+                            </div>
+
+                            <!-- Sections (dropdown) -->
+                            <div class="form-group row">
+                                <label for="ddlSections" class="col-sm-3 col-form-label">Sections:</label>
+                                <div class="col-sm-9">
+                                    <select asp-for="NewAmendment.Sections" id="ddlSections" name="Sections" class="form-control">
+                                        <option value="Sections">Sections</option>
+                                        <option value="Forms">Forms</option>
+                                        <option value="Schedule">Schedule</option>
+                                        <option value="Chapter">Chapter</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <!-- Additional fields for Sections -->
+                            <div id="sectionFields" class="conditional-field">
+                                <div class="form-group row">
+                                    <label for="SubSection" class="col-sm-3 col-form-label">SubSection:</label>
+                                    <div class="col-sm-9">
+                                        <input asp-for="NewAmendment.SubSection" type="text" id="SubSection" name="SubSection" class="form-control" />
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="Clause" class="col-sm-3 col-form-label">Clause:</label>
+                                    <div class="col-sm-9">
+                                        <input asp-for="NewAmendment.Clause" type="text" id="Clause" name="Clause" class="form-control" />
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="SubClause" class="col-sm-3 col-form-label">SubClause:</label>
+                                    <div class="col-sm-9">
+                                        <input asp-for="NewAmendment.SubClause" type="text" id="SubClause" name="SubClause" class="form-control" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Additional field for Schedule -->
+                            <div id="scheduleFields" class="conditional-field">
+                                <div class="form-group row">
+                                    <label for="Entry" class="col-sm-3 col-form-label">Entry:</label>
+                                    <div class="col-sm-9">
+                                        <input asp-for="NewAmendment.Entry" type="text" id="Entry" name="Entry" class="form-control" />
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Amendment Number -->
+                            <div class="form-group row">
+                                <label for="SNumber" class="col-sm-3 col-form-label">No:</label>
+                                <div class="col-sm-9">
+                                    <input asp-for="NewAmendment.Snumber" type="text" id="SNumber" name="SNumber" class="form-control" />
+                                </div>
+                            </div>
+
+                            <!-- Amendment Type (dropdown) -->
+                            <div class="form-group row">
+                                <label for="ddlAmendmentType" class="col-sm-3 col-form-label">Amendment Type:</label>
+                                <div class="col-sm-9">
+                                    <select asp-for="NewAmendment.AmendmentType" id="ddlAmendmentType" name="AmendmentType" class="form-control">
+                                        <option value="substituted">Substituted</option>
+                                        <option value="Omitted">Omitted</option>
+                                        <option value="Inserted">Inserted</option>
+                                        <option value="Added">Added</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Content -->
+                            <div class="form-group row">
+                                <label for="txtContent" class="col-sm-3 col-form-label">Content:</label>
+                                <div class="col-sm-9">
+                                    <textarea asp-for="NewAmendment.AmendedContent" id="txtContent" name="Content" class="form-control"></textarea>
+                                </div>
+                            </div>
+
+
+
+                            <!-- Submit Button -->
+                            <div class="form-group row">
+                                <div class="col-sm-12 text-right">
+                                    <button type="submit" id="btnCreateAmendment" class="btn buttonCustom">Create Amendment</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Amendments Table -->
+            <div class="row mt-4">
+                <div class="card col-md-12">
+                    <div class="card-header">
+                        <h3 class="card-title">Amendments History</h3>
+                    </div>
+                    <div class="card-body">
+                        <table id="example2" class="table-bordered table-head-fixed text-nowrap table-striped table">
+                            <thead>
+                                <tr>
+                                    <th>Amend ID</th>
+                                    <th>Amendment No</th>
+                                    <th>Sections</th>
+                                    <th>Amendment Type</th>
+                                    <th>Amendment Content</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var amendment in Model.AmendmentsHistory)
+                                {
+                                    <tr>
+                                        <td>@Html.DisplayFor(modelItem => amendment.AmendId)</td>
+                                        <td>@Html.DisplayFor(modelItem => amendment.VersionNo)</td>
+                                        <td>@Html.DisplayFor(modelItem => amendment.Sections)</td>
+                                        <td>@Html.DisplayFor(modelItem => amendment.AmendmentType)</td>
+                                        <td>@Html.DisplayFor(modelItem => amendment.AmendedContent)</td>
+                                        <td class="d-flex justify-content-center align-items-center gap-4"
+                                            style="border: none;">
+                                            @*    <a class="button" data-toggle="modal" data-target="#editModal-@item.SubcategoryId">
+                                        <i class="fa-regular fa-pen-to-square"></i>
+                                        </a> : *@
+
+                                            <a asp-action="Edit" asp-route-id="@amendment.AmendId">
+                                                <i class="fa-regular fa-pen-to-square"></i>
+                                            </a> :<a asp-action="Delete" asp-route-id="@amendment.AmendId">
+                                                <i class="fa-regular fa-trash-can"></i>
+                                            </a> :<a asp-action="Details" asp-route-id="@amendment.AmendId">
+                                                <i class="fa-solid fa-circle-info"></i>
+                                            </a> :
+
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+    @section scripts {
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <script>
+            $(document).ready(function () {
+                $('#ddlSections').change(function () {
+                    var selectedSection = $(this).val();
+
+                    if (selectedSection === 'Sections') {
+                        $('#sectionFields').show();
+                        $('#scheduleFields').hide();
+                    } else if (selectedSection === 'Schedule') {
+                        $('#sectionFields').hide();
+                        $('#scheduleFields').show();
+                    } else {
+                        $('#sectionFields').hide();
+                        $('#scheduleFields').hide();
+                    }
+                });
+                // Function to load versions based on document ID
+                function loadVersionsByDocId(docId) {
+                    $.ajax({
+                        url: '@Url.Action("GetVersionsByDocId", "Amendment")',
+                        type: 'GET',
+                        data: { docId: docId },
+                        success: function (data) {
+                            $('.version-buttons').empty();
+
+                            $.each(data, function (index, version) {
+                                var button = '<div class="col-md-1 text-center">' +
+                                    '<button type="button" class="btn btn-info mb-2 version-button" ' +
+                                    'data-version-id="' + version.versionId + '" ' +
+                                    'data-version-number="' + version.versionNo + '" ' +
+                                    'data-doc-id="' + version.docId + '">' +
+                                    'A ' + version.versionNo +
+                                    '</button>' +
+                                    '</div>';
+
+                                $('.version-buttons').append(button);
+                            });
+                        },
+                        error: function () {
+                            alert('Error fetching versions.');
+                        }
+                    });
+                }
+
+                // Initial load of versions based on ViewBag.DocId
+                var initialDocId = '@ViewBag.DocId';
+                loadVersionsByDocId(initialDocId);
+
+                // Event handler for version button click
+                $(document).on('click', '.version-button', function () {
+                    const versionId = $(this).data('version-id');
+                    const versionNumber = $(this).data('version-number');
+                    var docId = $(this).data('doc-id');
+
+                    $('#ddlVersionNo').val(versionNumber);
+                    $('#hdnVersionId').val(versionId);
+                    $('#hdnDocId').val(docId);
+                });
+            });
+        </script>
+    }

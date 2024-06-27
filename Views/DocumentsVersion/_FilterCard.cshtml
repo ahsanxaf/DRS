@@ -1,0 +1,143 @@
+﻿
+@section styles {
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+    <style>
+        /* Adjust width of select2 dropdown */
+        .select2-container {
+            width: 100% !important; /* Adjust width as needed */
+        }
+
+        /* Optional: Apply custom styles */
+        .select2-container--default .select2-selection--single {
+            height: 38px;
+            line-height: 38px;
+            border: 1px solid #ced4da;
+            border-radius: .25rem;
+            padding: 0 10px;
+        }
+    </style>
+}
+
+
+                        <div id="filterCard" style="display: none;" class="col-md-12">
+                            <div class="card" style="background:#0f711f;">
+                                <div class="card-header">
+                                    <h4>Filter</h4>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-4">
+                                            <div class="form-group">
+                                                <label for="lawCategoryFilter" class="control-label">Law Category:</label>
+                                                <select id="lawCategoryFilter" class="form-control">
+                                                    <option value="">All</option>
+
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="form-group">
+                                                <label for="ministriesFilter" class="control-label">Ministries:</label>
+                                                <select id="ministriesFilter" class="form-control">
+                                                    <option value="">All</option>
+
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-4">
+                                            <div class="form-group">
+                                                <label for="yearFilter" class="control-label">Year:</label>
+                                                <select id="yearFilter" class="form-control">
+                                                    <option value="">All</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="form-group">
+                                                <label for="volumeFilter" class="control-label">Volume:</label>
+                                                <select id="volumeFilter" class="form-control">
+                                                    <option value="">All</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+@section scripts {
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+
+
+    <script>
+
+            
+            // Toggle filter card visibility
+            $('#filterToggleBtn').on('click', function () {
+                $('#filterCard').toggle();
+            });
+
+            // Populate Year Filter
+            var uniqueYears = table.column(4).data().unique().sort();
+            var yearOptions = [{ id: '', text: 'All' }];
+            $.each(uniqueYears, function (index, value) {
+                yearOptions.push({ id: value, text: value });
+            });
+
+            // Populate Law Category Filter
+            var uniqueLawCategories = table.column(7).data().unique().sort();
+            var lawCategoryOptions = [{ id: '', text: 'All' }];
+            $.each(uniqueLawCategories, function (index, value) {
+                lawCategoryOptions.push({ id: value, text: value });
+            });
+
+            $('#lawCategoryFilter').select2({
+                data: lawCategoryOptions
+            }).on('change', function () {
+                var lawCategoryValue = $(this).val();
+                table.column(7).search(lawCategoryValue ? '^' + lawCategoryValue + '$' : '', true, false).draw();
+            });
+
+            // Populate Ministries Filter
+            var uniqueMinistries = table.column(6).data().unique().sort();
+            var ministryOptions = [{ id: '', text: 'All' }];
+            $.each(uniqueMinistries, function (index, value) {
+                ministryOptions.push({ id: value, text: value });
+            });
+
+            $('#ministriesFilter').select2({
+                data: ministryOptions
+            }).on('change', function () {
+                var ministryValue = $(this).val();
+                table.column(6).search(ministryValue ? '^' + ministryValue + '$' : '', true, false).draw();
+            });
+
+            // Initialize Select2 for Year Filter
+            $('#yearFilter').select2({
+                data: yearOptions
+            }).on('change', function () {
+                var yearValue = $(this).val();
+                table.column(4).search(yearValue ? '^' + yearValue + '$' : '', true, false).draw();
+            });
+
+
+            // Populate Volume Filter
+            var uniqueVolumes = table.column(5).data().unique().sort();
+            var volumeOptions = [{ id: '', text: 'All' }];
+            $.each(uniqueVolumes, function (index, value) {
+                volumeOptions.push({ id: value, text: value });
+            });
+
+            // Initialize Select2 for Volume Filter
+            $('#volumeFilter').select2({
+                data: volumeOptions
+            }).on('change', function () {
+                var volumeValue = $(this).val();
+                table.column(5).search(volumeValue ? '^' + volumeValue + '$' : '', true, false).draw();
+            });
+        });
+    </script>
+}

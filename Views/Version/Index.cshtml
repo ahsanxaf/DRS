@@ -1,0 +1,150 @@
+@model IEnumerable<DRS.Models.Version>
+
+@{
+    ViewData["Title"] = "Version";
+}
+
+<div class="wrapper">
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="">Version</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+                        <li class="breadcrumb-item">Version</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+        <!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="card">
+                    <div class="card-body">
+                        <table id="example2" class="table-bordered table table-head-fixed text-nowrap table-striped">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.DocId)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.VersionNo)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.Vyear)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.Vnumber)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.VgazetteYear)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.VgazettePart)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.VgazettePage)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.DocumentName)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.DocUrl)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.CommencementDate)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.PublishingDate)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.ValidityDate)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.VdocNature)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.Vstatus)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.Remarks)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.UploadDate)
+                                    </th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.DocId)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.VersionNo)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Vyear)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Vnumber)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.VgazetteYear)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.VgazettePart)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.VgazettePage)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.DocumentName)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.DocUrl)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.CommencementDate)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.PublishingDate)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.ValidityDate)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.VdocNature)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Vstatus)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Remarks)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.UploadDate)
+                                        </td>
+                                        <td>
+                                            <a asp-action="Edit" asp-route-id="@item.VersionId">Edit</a> |
+                                            <a asp-action="Details" asp-route-id="@item.VersionId">Details</a> |
+                                            <a asp-action="Delete" asp-route-id="@item.VersionId">Delete</a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+    </section>
+</div>

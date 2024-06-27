@@ -1,0 +1,139 @@
+@model IEnumerable<DRS.Models.User>
+@using Newtonsoft.Json
+@using DRS.Extensions
+@{
+    ViewData["Title"] = "Users";
+
+    Pager pager = new Pager();
+
+    int pageNo = 0;
+
+    if (ViewBag.Pager != null)
+    {
+        pager = ViewBag.Pager;
+        pageNo = pager.CurrentPage;
+    }
+
+    // var userPermissions = ViewBag.LoggedInUserPermissions as List<DRS.Models.Permission>;
+    var userPermissionsJson = Context.Session.GetString("LoggedInUserPermissions");
+    var userPermissions = userPermissionsJson == null ? new List<Permission>() :
+    JsonConvert.DeserializeObject<List<Permission>>(userPermissionsJson);
+    var newUsers = new DRS.Models.User();
+}
+
+<div class="wrapper">
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="">Users</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+                        <li class="breadcrumb-item">Users & Roles</li>
+                        <li class="breadcrumb-item">Users</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+        <!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="card">
+                    <div class="card-body">
+                        <table id="example2" class="table-bordered table table-head-fixed text-nowrap table-striped">
+                            <thead class="bg-light">
+                                <tr>
+                                    <th>Member ID</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Contact Number</th>
+                                    <th>Account Status</th>
+                                    <th>Role</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>@item.MemberId</td>
+                                        <td>@item.Name</td>
+                                        <td>@item.Email</td>
+                                        <td>
+                                            <p class="fw-normal mb-1">@item.ContactNo</p>
+                                        </td>
+
+                                        <td>
+                                            <span
+                                                class="badge @(item.AccountStatus == "Active" ? "badge-active" : "badge-inactive")">@item.AccountStatus</span>
+                                        </td>
+
+                                        <td>@item.Role?.RoleName</td>
+
+                                        <td class="d-flex justify-content-center align-items-center gap-4">
+                                            <a href="@Url.Action("ViewUser", "UsersRoles", new { userId = @item.UserId })">
+                                                <i class="fa-solid fa-circle-info"></i>
+                                            </a>
+
+                                            @if (userPermissions != null && userPermissions.Any(p => p.AddPermission == true
+                                           &&
+                                           p.UserModule == true))
+                                            {
+                                                <a href="@Url.Action("EditUser", "UsersRoles", new { userId = @item.UserId })">
+                                                    <i class="fa-regular fa-pen-to-square"></i>
+                                                </a>
+                                            }
+                                            <a class="button" data-toggle="modal" data-target="#deleteModal-@item.UserId">
+                                                <i class="fa-regular fa-trash-can"></i>
+                                            </a>
+
+                                            @if (userPermissions != null && userPermissions.Any(p => p.DeletePermission ==
+                                           true))
+                                            {
+                                                <div class="modal fade" id="deleteModal-@item.UserId" tabindex="-1"
+                                                    role="dialog" aria-labelledby="deleteModalTitle" aria-hidden="true">
+                                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="deleteModalTitle">Delete Law
+                                                                    Category</h5>
+                                                                <button type="button" class="close" data-dismiss="modal"
+                                                                    aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                            </div>
+                                                            <div class="modal-body word-break">
+                                                                Are you sure you want to delete the user <br><strong>
+                                                                    @item.Name</strong>?
+                                                            </div>
+                                                            <div class="modal-footer d-flex gap-4">
+                                                                <a asp-action="Index" class="btn buttonCustom">Back</a>
+                                                                <form method="post"
+                                                                    action="@Url.Action("Delete", "UsersRoles", new { userId = @item.UserId })">
+                                                                    @Html.Hidden("userId", @item.UserId)
+                                                                    <button type="submit" class="btn btn-danger">
+                                                                        <i class="fa-regular fa-trash-can"></i> &nbsp; Delete
+                                                                    </button>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+    </section>
+</div>

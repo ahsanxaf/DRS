@@ -1,0 +1,85 @@
+@model DRS.Models.Amendment
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Amendment</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.DocId)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.DocId)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.VersionNo)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.VersionNo)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Sections)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Sections)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Snumber)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Snumber)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.AmendmentType)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.AmendmentType)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.BookNo)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.BookNo)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Entry)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.SubSection)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Clause)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.SubClause)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.AmendedContent)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.AmendedContent)
+        </dd>
+
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.UpdatedBy)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.UpdatedBy)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.UpdatedTime)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.UpdatedTime)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.AmendId">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

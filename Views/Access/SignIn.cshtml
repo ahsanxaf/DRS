@@ -1,0 +1,174 @@
+﻿@model DRS.Models.VMLogin
+
+@{
+    ViewData["Title"] = "Sign In";
+    Layout = null;
+}
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>@ViewData["Title"] - DRS</title>
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+          integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+          crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap-grid.min.css" />
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css">
+
+    <link rel="stylesheet" href="~/plugins/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" href="~/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
+    <link rel="stylesheet" href="~/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+    <link rel="stylesheet" href="~/plugins/jqvmap/jqvmap.min.css">
+    <link rel="stylesheet" href="~/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
+    <link rel="stylesheet" href="~/plugins/daterangepicker/daterangepicker.css">
+    <link rel="stylesheet" href="~/plugins/summernote/summernote-bs4.min.css">
+    <link rel="stylesheet" href="~/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="~/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+    <link rel="stylesheet" href="~/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+    <link rel="stylesheet" href="~/plugins/select2/css/select2.min.css" />
+    <link rel="stylesheet" href="~/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css" />
+
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/layout.css" asp-append-version="true" />
+
+    <style>
+
+        .video-wrapper {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+            .video-wrapper::before {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.6);
+                z-index: 1;
+            }
+
+        #bgvid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 0;
+        }
+
+        .card {
+            max-width: 450px;
+            width: 100%;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .form-control {
+            width: 100%;
+        }
+
+        .buttonCustom {
+            width: 100%;
+        }
+
+        .validation-error {
+            color: red;
+        }
+    </style>
+
+</head>
+
+<body class="m-0 p-0">
+    <div class="video-wrapper">
+        <video playsinline autoplay muted loop id="bgvid">
+            <source src="/images/bg-video.mp4" type="video/mp4">
+        </video>
+    </div>
+
+    <div class="h-100 d-flex align-items-center justify-content-around m-0">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="fw-bold fs-0.5 mt-4 text-center">SIGN IN</h4>
+
+                <form method="post" asp-action="SignIn">
+                    <div class="card-body d-flex flex-column align-items-center mx-auto">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                        <div class="w-100 mb-2 p-3">
+                            <div class="row">
+                                <div class="col-md-12 form-group">
+                                    <label asp-for="Email"></label>
+                                    <input type="email" id="Email" class="form-control" asp-for="Email" placeholder="Enter Your Email Address" />
+                                    <span asp-validation-for="Email" class="text-danger" id="EmailError"></span>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12 form-group">
+                                    <label asp-for="Password"></label>
+                                    <input type="password" id="Password" class="form-control" asp-for="Password" placeholder="Password" />
+                                    <span asp-validation-for="Password" class="text-danger" id="PasswordError"></span>
+                                </div>
+                            </div>
+
+                            <div class="row text-end">
+                                <a asp-action="ForgotPassword" asp-controller="Account">Forgot Password?</a>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-center w-100 mb-2 p-3">
+                            <button type="submit" class="btn buttonCustom">
+                                Sign In
+                            </button>
+                        </div>
+
+                        @if (ViewData["ValidateMessage"] != null)
+                        {
+                            <div class="mt-2">
+                                <label class="validation-error">@ViewData["ValidateMessage"]</label>
+                            </div>
+                        }
+
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="text-center">
+<img src="/images/govtlogo-transparent-white.png" alt="signin-logo" height="150" width="150">
+            <h2 class="fw-light mt-4 text-white">Ministry of Law & Justice</h2>
+            <h1 class="fw-bold mt-4 text-white">Document Retrieval System</h1>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation/1.19.3/jquery.validate.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js" crossorigin="anonymous"></script>
+    <script>
+        document.addEventListener('copy', function (e) {
+            e.preventDefault();
+        });
+
+        document.getElementById('Email').addEventListener('input', function () {
+            document.getElementById('EmailError').style.display = 'none';
+        });
+
+        document.getElementById('Password').addEventListener('input', function () {
+            document.getElementById('PasswordError').style.display = 'none';
+        });
+    </script>
+</body>

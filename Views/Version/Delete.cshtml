@@ -1,0 +1,144 @@
+@model DRS.Models.Version
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<div class="wrapper">
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="">Edit Version</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+                        <li class="breadcrumb-item">Advanced Search</li>
+                        <li class="breadcrumb-item">Edit Version</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+        <!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="pb-4 d-flex justify-content-end gap-4">
+                            <form asp-action="Delete">
+                                <input type="hidden" asp-for="VersionId" />
+                                <input type="submit" value="Delete" class="btn btn-danger" />
+                            </form>
+                            <a asp-controller="DocumentsVersion" asp-action="Index">
+                                    <button type="" class="btn buttonCustom2">Back to Search</button>
+                                </a>
+                        </div>
+
+                        <dl class="row">
+                            <dt class="col-sm-2">
+                                @Html.DisplayNameFor(model => model.DocId)
+                            </dt>
+                            <dd class="col-sm-10">
+                                @Html.DisplayFor(model => model.DocId)
+                            </dd>
+                            <dt class="col-sm-2">
+                                @Html.DisplayNameFor(model => model.VersionNo)
+                            </dt>
+                            <dd class="col-sm-10">
+                                @Html.DisplayFor(model => model.VersionNo)
+                            </dd>
+                            <dt class="col-sm-2">
+                                @Html.DisplayNameFor(model => model.Vyear)
+                            </dt>
+                            <dd class="col-sm-10">
+                                @Html.DisplayFor(model => model.Vyear)
+                            </dd>
+                            <dt class="col-sm-2">
+                                @Html.DisplayNameFor(model => model.Vnumber)
+                            </dt>
+                            <dd class="col-sm-10">
+                                @Html.DisplayFor(model => model.Vnumber)
+                            </dd>
+                            <dt class="col-sm-2">
+                                @Html.DisplayNameFor(model => model.VgazetteYear)
+                            </dt>
+                            <dd class="col-sm-10">
+                                @Html.DisplayFor(model => model.VgazetteYear)
+                            </dd>
+                            <dt class="col-sm-2">
+                                @Html.DisplayNameFor(model => model.VgazettePart)
+                            </dt>
+                            <dd class="col-sm-10">
+                                @Html.DisplayFor(model => model.VgazettePart)
+                            </dd>
+                            <dt class="col-sm-2">
+                                @Html.DisplayNameFor(model => model.VgazettePage)
+                            </dt>
+                            <dd class="col-sm-10">
+                                @Html.DisplayFor(model => model.VgazettePage)
+                            </dd>
+                            <dt class="col-sm-2">
+                                @Html.DisplayNameFor(model => model.DocumentName)
+                            </dt>
+                            <dd class="col-sm-10">
+                                @Html.DisplayFor(model => model.DocumentName)
+                            </dd>
+                            <dt class="col-sm-2">
+                                @Html.DisplayNameFor(model => model.DocUrl)
+                            </dt>
+                            <dd class="col-sm-10">
+                                @Html.DisplayFor(model => model.DocUrl)
+                            </dd>
+                            <dt class="col-sm-2">
+                                @Html.DisplayNameFor(model => model.CommencementDate)
+                            </dt>
+                            <dd class="col-sm-10">
+                                @Html.DisplayFor(model => model.CommencementDate)
+                            </dd>
+                            <dt class="col-sm-2">
+                                @Html.DisplayNameFor(model => model.PublishingDate)
+                            </dt>
+                            <dd class="col-sm-10">
+                                @Html.DisplayFor(model => model.PublishingDate)
+                            </dd>
+                            <dt class="col-sm-2">
+                                @Html.DisplayNameFor(model => model.ValidityDate)
+                            </dt>
+                            <dd class="col-sm-10">
+                                @Html.DisplayFor(model => model.ValidityDate)
+                            </dd>
+                            <dt class="col-sm-2">
+                                @Html.DisplayNameFor(model => model.VdocNature)
+                            </dt>
+                            <dd class="col-sm-10">
+                                @Html.DisplayFor(model => model.VdocNature)
+                            </dd>
+                            <dt class="col-sm-2">
+                                @Html.DisplayNameFor(model => model.Vstatus)
+                            </dt>
+                            <dd class="col-sm-10">
+                                @Html.DisplayFor(model => model.Vstatus)
+                            </dd>
+                            <dt class="col-sm-2">
+                                @Html.DisplayNameFor(model => model.Remarks)
+                            </dt>
+                            <dd class="col-sm-10">
+                                @Html.DisplayFor(model => model.Remarks)
+                            </dd>
+                            <dt class="col-sm-2">
+                                @Html.DisplayNameFor(model => model.UploadDate)
+                            </dt>
+                            <dd class="col-sm-10">
+                                @Html.DisplayFor(model => model.UploadDate)
+                            </dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+    </section>
+</div>

@@ -1,0 +1,265 @@
+﻿﻿/* Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
+for details on configuring this project to bundle and minify static web assets. */
+
+/* a.navbar-brand {
+  white-space: normal;
+  text-align: center;
+  word-break: break-all;
+}
+
+a {
+  color: #0077cc;
+}
+
+.btn-primary {
+  color: #fff;
+  background-color: #1b6ec2;
+  border-color: #1861ac;
+}
+
+.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
+  color: #fff;
+  background-color: #1b6ec2;
+  border-color: #1861ac;
+}
+
+.border-top {
+  border-top: 1px solid #e5e5e5;
+}
+.border-bottom {
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.box-shadow {
+  box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+}
+
+button.accept-policy {
+  font-size: 1rem;
+  line-height: inherit;
+}
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  white-space: nowrap;
+  line-height: 60px;
+} */
+
+/* https://colorhunt.co/palette/12372a436850adbc9ffbfada */
+
+body {
+	padding: 0;
+	margin: 0;
+	justify-content: center;
+}
+
+.container-fluid {
+	padding: 0;
+}
+
+.content-wrapper {
+	padding: 1% 2%;
+}
+
+.main-sidebar {
+	position: fixed !important;
+	height: 100vh;
+	width: fit-content;
+	background-color: #12372a !important;
+	padding: 0.5rem 0 !important;
+	color: #f3f4ef !important;
+}
+
+.sidebar {
+	padding: 0.5rem 0 !important;
+	overflow-y: auto;
+	height: 100vh; /* Optional: This will make the sidebar take up the full viewport height */
+}
+
+.navbar {
+	background-color: #12372a !important;
+
+	.nav-link {
+		color: #f3f4ef !important;
+
+		:hover {
+			color: #adbc9f !important;
+		}
+	}
+}
+
+aside nav {
+	overflow: auto; /* Change from 'hidden' to 'auto' */
+	margin: 0.1rem 0;
+}
+
+.sidebar-topdiv {
+	display: flex !important;
+	flex-direction: column !important;
+	align-items: center !important;
+	justify-content: center !important;
+	row-gap: 1rem !important;
+	padding: 1rem 1rem !important;
+	position: sticky;
+	top: 0;
+	z-index: 100;
+	background-color: #12372a;
+	height: auto; /* Adjust this value based on your actual layout */
+}
+
+.sidebar-mainlogo-heading {
+	display: flex !important;
+	row-gap: 1rem !important;
+	flex-direction: column !important;
+	align-items: center !important;
+	justify-content: center !important;
+}
+
+.sidebar-username-logo {
+	display: flex !important;
+	align-items: center !important;
+	justify-content: center !important;
+
+	p {
+		margin: 0 !important;
+	}
+
+	.info {
+		overflow-wrap: break-word;
+		word-break: break-all;
+	}
+}
+
+.sidebar-usericon {
+	color: #f3f4ef !important;
+}
+
+.govt-logo-sidebar {
+	padding: 0 !important;
+	margin: 0 !important;
+	height: 6rem !important;
+	max-height: none !important;
+}
+
+.sidebar-collapse .main-sidebar .govt-logo-sidebar {
+	height: 3rem !important; /* Change this to the size you want when the sidebar is collapsed */
+}
+
+.nav-pills {
+	.nav-item {
+		border-radius: 0.5rem 0 0 0.5rem !important;
+
+		.nav-link {
+			color: #f3f4ef !important;
+		}
+
+		.nav-treeview {
+			padding-left: 14px !important;
+			font-size: small;
+			fill-opacity: 0.5 !important;
+
+			:hover {
+				background-color: #adbc9f !important;
+			}
+
+			.nav-item {
+				:hover {
+					background-color: #adbc9f !important;
+					color: #12372a !important;
+				}
+			}
+		}
+
+		:first-child:hover {
+			background-color: #436850;
+		}
+	}
+}
+
+/* .sidebar-collapse .main-sidebar,
+.sidebar-collapse .main-sidebar::before {
+	margin-left: -260px !important;
+} */
+
+@media (min-width: 768px) {
+	body:not(.sidebar-mini-md):not(.sidebar-mini-xs):not(.layout-top-nav)
+		.content-wrapper,
+	body:not(.sidebar-mini-md):not(.sidebar-mini-xs):not(.layout-top-nav)
+		.main-footer,
+	body:not(.sidebar-mini-md):not(.sidebar-mini-xs):not(.layout-top-nav)
+		.main-header {
+		transition: margin-left 0.3s ease-in-out;
+		margin-left: 245px;
+	}
+}
+
+.sidebar-collapse .main-sidebar[b-aumwleyz7n],
+.sidebar-collapse .main-sidebar[b-aumwleyz7n]::before {
+	transition: margin-left 0.5s ease-in-out;
+	margin-left: 0 !important;
+}
+
+/* .sidebar-collapse .main-sidebar .sidebar-username-logo .user-panel {
+	display: none !important;
+	padding: 0 !important;
+} */
+
+@media (min-width: 992px) {
+	.sidebar-mini.sidebar-collapse .brand-text,
+	.sidebar-mini.sidebar-collapse .sidebar .nav-sidebar .nav-link p,
+	.sidebar-mini.sidebar-collapse .sidebar .user-panel > .info,
+	.sidebar-mini.sidebar-collapse .sidebar .user-panel > .image {
+		/* Add this selector */
+		margin-left: -10px;
+		-webkit-animation-name: fadeOut;
+		animation-name: fadeOut;
+		-webkit-animation-duration: 0.3s;
+		animation-duration: 0.3s;
+		-webkit-animation-fill-mode: both;
+		animation-fill-mode: both;
+		visibility: hidden;
+	}
+}
+
+@media (max-width: 992px) {
+	.sidebar-mini.sidebar-collapse .main-sidebar {
+		box-shadow: none !important;
+		margin-left: -250px !important;
+	}
+}
+
+.main-sidebar,
+.main-sidebar::before {
+	transition: margin-left 0.3s ease-in-out, width 0.3s ease-in-out;
+	width: 250px;
+}
+
+body:not(.sidebar-mini-md):not(.sidebar-mini-xs):not(.layout-top-nav)
+	.content-wrapper,
+body:not(.sidebar-mini-md):not(.sidebar-mini-xs):not(.layout-top-nav)
+	.main-footer,
+body:not(.sidebar-mini-md):not(.sidebar-mini-xs):not(.layout-top-nav)
+	.main-header {
+	transition: margin-left 0.3s ease-in-out;
+	margin-left: 250px; /* Change this to 5px */
+}
+
+.sidebar-mini .main-sidebar .nav-link,
+.sidebar-mini-md .main-sidebar .nav-link,
+.sidebar-mini-xs .main-sidebar .nav-link {
+	width: auto !important;
+	transition: width ease-in-out 0.3s;
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.hideScrollbar::-webkit-scrollbar {
+	display: none !important;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.hideScrollbar {
+	-ms-overflow-style: none !important; /* IE and Edge */
+	scrollbar-width: none !important; /* Firefox */
+}

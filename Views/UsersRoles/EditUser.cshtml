@@ -1,0 +1,145 @@
+@{
+    ViewData["Title"] = "Edit User";
+}
+
+@model DRS.Models.User
+
+<!-- Content Wrapper. Contains page content -->
+<div class="wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="">Edit User</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="@Url.Action("Index", "Home" )">Home</a></li>
+                        <li class="breadcrumb-item">Users & Roles</li>
+                        <li class="breadcrumb-item">
+                            Edit User
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="card">
+                    <div class="card-header">
+<div class="d-flex justify-content-end">
+                            <a asp-controller="UsersRoles" asp-action="Users" class="btn buttonCustom2">
+                                Back to Users List
+                            </a>
+                        </div>
+                    </div>
+                    <!-- form start -->
+                    <div class="card-body">
+                        @if (Model is null)
+                        {
+                            <p>No User Found</p>
+                        }
+                        else
+                        {
+
+                            <form method="post">
+                                <div class="mb-2 p-3">
+                                    <div class="row">
+                                        <div class="col-md-6 form-group">
+                                            <label class="form-label">User ID</label>
+                                            <input type="text" class="form-control" asp-for="UserId" value="@ViewBag.UserId" readonly />
+                                        </div>
+
+                                        <div class="col-md-6 form-group">
+                                            <label for="fullName" class="form-label">Full Name</label>
+                                            <input type="text" class="form-control" id="fullName"
+                                                   asp-for="Name" />
+                                        </div>
+
+
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-3 form-group">
+                                            <label for="contactNo">Password</label>
+                                            <input type="text" class="form-control" id="password" readonly
+                                                   asp-for="Password" />
+                                        </div>
+                                        <div class="col-md-3 form-group">
+                                            <label for="contactNo">Employee ID</label>
+                                            <input type="tel" class="form-control" id="contactNo"
+                                                   asp-for="MemberId" readonly />
+                                        </div>
+                                        <div class="col-md-3 form-group">
+                                            <label for="email">Email</label>
+                                            <input type="email" class="form-control" id="email"
+                                                   asp-for="Email" />
+                                        </div>
+                                        <div class="col-md-3 form-group">
+                                            <label for="ContactNo">Mobile No.</label>
+                                            <input type="tel" class="form-control" id="contactno"
+                                                   asp-for="ContactNo" />
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-3 form-group">
+                                            <label for="city">City</label>
+                                            <input type="text" class="form-control" id="city"
+                                                   asp-for="City" />
+                                        </div>
+                                        <div class="col-md-3 form-group">
+                                            <label for="state">State</label>
+                                            <input type="text" class="form-control" id="state"
+                                                   asp-for="State" />
+                                        </div>
+                                        <div class="col-md-3 form-group">
+                                            <label for="pincode">Pincode</label>
+                                            <input type="text" class="form-control" id="pincode"
+                                                   asp-for="PinCode" />
+                                        </div>
+                                        <div class="col-md-3 form-group">
+                                            <label for="dob" class="form-label">Date of Birth</label>
+                                            <input type="date" class="form-control" id="dob" asp-for="Dob" />
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-6 form-group">
+                                            <label for="accountStatus">Account Status</label>
+                                            <select class="form-control" asp-for="AccountStatus">
+                                                <option value="Active" selected="@((Model.AccountStatus == "Active") ? "selected" : null)">Active</option>
+                                                <option value="Deactivated" selected="@((Model.AccountStatus == "Deactivated") ? "selected" : null)">Deactivate</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="col-md-6 form-group">
+                                            <label for="role">Role</label>
+                                            <select class="form-control" asp-for="RoleId" asp-items="@(new SelectList(ViewBag.Roles, "RoleId", "RoleName", Model.RoleId))">
+                                                <option value="" disabled>--Select Role--</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <!-- Buttons -->
+                                <div class="d-flex justify-content-center p-3">
+                                    <button type="submit" class="btn buttonCustom">Update</button>
+                                </div>
+
+                            </form>
+                        }
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->

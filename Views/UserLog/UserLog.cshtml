@@ -1,0 +1,63 @@
+﻿@model List<DRS.Models.UserLogViewModel>
+
+@{
+    ViewData["Title"] = "User Logs";
+}
+
+<div class="wrapper">
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="">User Logs</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="@Url.Action("Index", "Home")">Home</a></li>
+                        <li class="breadcrumb-item">Login Audit</li>
+                        <li class="breadcrumb-item">User Logs</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+        <!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="card">
+                    <div class="card-body">
+                        <table id="example2" class="table-bordered table table-head-fixed text-nowrap table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Log No.</th>
+                                    <th>User Name</th>
+                                    <th>Login Status</th>
+                                    <th>IP Address</th>
+                                    <th>User Browser</th>
+                                    <th>Login Time</th>
+                                    <th>Logout Time</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var log in Model)
+                                {
+                                    <tr>
+                                        <td>@log.LogsId</td>
+                                        <td>@log.UserName</td>
+                                        <td>@log.LoginStatus</td>
+                                        <td>@log.UserIp</td>
+                                        <td class="table-title">@log.UserBrowser</td>
+                                        <td>@log.LogInTime?.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                                        <td>@log.LogOutTime?.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+    </section>
+</div>

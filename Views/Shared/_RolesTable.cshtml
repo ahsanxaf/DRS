@@ -1,0 +1,135 @@
+﻿@model DRS.Models.CommonModel
+
+<div class="card">
+    <div class="card-body">
+        <table id="example2" class="table-bordered table table-head-fixed text-nowrap table-striped">
+            <thead>
+                <tr>
+                    <th>Role ID</th>
+                    <th>Role Name</th>
+                    <th>Created At</th>
+                    <th class="icon-column"></th>
+                </tr>
+            </thead>
+            
+            <tbody>
+                @foreach (var role in Model.roleslist)
+                {
+                    <tr data-toggle="collapse" data-target="#details-@role.RoleId" aria-expanded="false" aria-controls="details-@role.RoleId" class="collapse-row">
+                        <td>@role.RoleId</td>
+                        <td>@role.RoleName</td>
+                        <td>@role.CreateAt</td>
+                        <td class="icon-column"><i class="fa-solid fa-angle-down fs-5"></i></td>
+                    </tr>
+
+                    <tr id="details-@role.RoleId" class="collapse">
+                        <td colspan="4">
+                            <form method="post" action="/UsersRoles/UpdatePermissions">
+
+                                <input type="hidden" name="roleId" value="@role.RoleId" />
+
+                                <div class="p-3">
+                                    <div class="row justify-content-center">
+                                        <div class="col-md-3 form-group">
+                                            <label class="checkbox-inline">
+                                                @Html.CheckBox("UserModule", role.Permissions.Any(p => p.UserModule == true))
+                                                User Modules
+                                            </label>
+                                        </div>
+                                        <div class="col-md-3 form-group">
+                                            <label class="checkbox-inline">
+                                                @Html.CheckBox("DocumentCategoryModule", role.Permissions.Any(p => p.DocumentCategoryModule == true))
+                                                Document Management Module
+                                            </label>
+                                        </div>
+                                        <div class="col-md-3 form-group">
+                                            <label class="checkbox-inline">
+                                                @Html.CheckBox("LoginAuditModule", role.Permissions.Any(p => p.LoginAuditModule == true))
+                                                Login Audit Module
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="row justify-content-center">
+                                        <div class="col-md-3 form-group">
+                                            <label class="checkbox-inline">
+                                                @Html.CheckBox("DocumentModule", role.Permissions.Any(p => p.DocumentModule == true))
+                                                Document Module
+                                            </label>
+                                        </div>
+
+                                        <div class="col-md-3 form-group">
+                                            <label class="checkbox-inline">
+                                                @Html.CheckBox("SearchModule", role.Permissions.Any(p => p.SearchModule == true))
+                                                Search Module
+                                            </label>
+                                        </div>
+
+                                        <div class="col-md-3 form-group">
+                                            <label class="checkbox-inline">
+                                                @Html.CheckBox("BackupModule", role.Permissions.Any(p => p.BackupModule == true))
+                                                Backup Module
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="row justify-content-center">
+                                        <div class="col-md-3 form-group">
+                                            <label class="checkbox-inline">
+                                                @Html.CheckBox("AddPermissions", role.Permissions.Any(p => p.AddPermission == true))
+                                                Add Permissions
+                                            </label>
+                                        </div>
+
+                                        <div class="col-md-3 form-group">
+                                            <label class="checkbox-inline">
+                                                @Html.CheckBox("ViewPermissions", role.Permissions.Any(p => p.ViewPermission == true))
+                                                View Permissions
+                                            </label>
+                                        </div>
+
+                                        <div class="col-md-3 form-group">
+                                            <label class="checkbox-inline">
+                                                @Html.CheckBox("DeletePermissions", role.Permissions.Any(p => p.DeletePermission == true))
+                                                Delete Permissions
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex justify-content-center mb-2 p-3 w-100">
+                                    <button type="submit" class="btn buttonCustom">Update</button>
+                                </div>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <!-- /.card-body -->
+</div>
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            $('.collapse-row').click(function () {
+                var $target = $($(this).data('target'));
+                $target.collapse('toggle');
+                $(this).attr('aria-expanded', function (index, attr) {
+                    return attr === 'true' ? 'false' : 'true';
+                });
+            });
+        });
+    </script>
+}
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,320 @@
+﻿@using System.Net;
+
+@{
+    ViewData["Title"] = "Home";
+}
+
+<!-- Content Wrapper. Contains page content -->
+<div class="">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Dashboard</h1>
+                </div>
+                <div class="col-sm-6">
+                    @* <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="@Url.Action("Index", "Home" )">Home</a></li>
+                        <li class="breadcrumb-item">Dashboard</li>
+                    </ol> *@
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+            @{
+                int TotalVersion = ViewBag.TotalVersion;
+                int Constitutions = ViewBag.Constitutions;
+                int TotalDoc = ViewBag.TotalDoc;
+                int Presidentorder = ViewBag.Presidentorder;
+                int Ordinances = ViewBag.Ordinances;
+                int Rule = ViewBag.Rule;
+                int Amendments = ViewBag.Amendments;
+
+                var boxData = new[]
+                {
+                    new { Color = "bg-info", Count = TotalVersion, Title = "Total Documents", Icon = "/images/total.png", search=""},
+                    new { Color = "bg-info", Count = Constitutions, Title = "Constitutions", Icon = "/images/constitution.png", search="Constitution" },
+        new { Color = "bg-primary", Count = Presidentorder, Title = "Presidential Orders", Icon = "/images/presidential.png", search="President Order"},
+        new { Color = "bg-success", Count = Ordinances, Title = "Ordinances", Icon = "/images/ordinance.png", search="Ordinance" },
+        new { Color = "bg-danger", Count = TotalDoc, Title = "Acts", Icon = "/images/acts.png",search="Act" },
+        new { Color = "bg-secondary", Count = Rule, Title = "Rules", Icon = "/images/rules.png",search="Rule" },
+                    new { Color = "bg-warning", Count = Amendments, Title = "Amendments", Icon = "/images/ammendment.png", search="Amendment"}
+                };
+
+            }
+
+                <div class="diamondOuterContainer">
+                    <div class="row justify-content-center">
+                        @for (var i = 0; i < boxData.Length; i++)
+                        {
+                            <div class="col-lg-3 col-xl-3 col-12">
+                                <div class="diamond-container">
+                                    <!-- small box -->
+                            <a href="@Url.Action("Index", "DocumentsVersion")?filter=@boxData[i].search">
+                      
+
+                                        <div class="diamond @boxData[i].Color diamond-background">
+                                            <div class="inner">
+                                                <img class="diamond-image" src="@boxData[i].Icon" height="50" width="50" />
+                                                <h1 class="fs-5 fw-bold title p-0 pt-2 m-0">@boxData[i].Title</h1>
+                                                <p class="fs-1 fw-bolder count p-0 m-0">@boxData[i].Count</p>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                            <!-- ./col -->
+                        }
+                    </div>
+                </div>
+            <!-- ./col -->
+
+        <!-- Tab content -->
+        <div class="row">
+            <div class="card">
+                <div class="card-body">
+                    @{
+                        var tabs = new List<string> { "Law Categories / Division", "Ministries", "Year", "Volume" };
+                        var icons = new List<string> { "fa-gavel", "fa-building", "fa-calendar", "fa-book" };
+
+                    }
+
+                    <ul class="nav nav-tabs nav-pills d-flex border-0 text-center mb-4">
+                        @for (int i = 0; i < tabs.Count; i++)
+                        {
+                            var tabNameWithoutSpecialChars = tabs[i].Replace(" ", ""); // Remove spaces
+                            var encodedTabName = WebUtility.UrlEncode(tabNameWithoutSpecialChars).Replace("%2F", ""); // Remove %2F
+                            <li class="nav-item flex-grow-1 text-center mx-2 customTabNavItem">
+                                <a class="nav-link @(i == 0 ? "active" : "") border-0" data-toggle="tab"
+                                   href="#tab@(encodedTabName)">@tabs[i]</a>
+                            </li>
+                        }
+                    </ul>
+
+                    <div class="tab-content border-top mt-2">
+                        @for (int i = 0; i < tabs.Count; i++)
+                        {
+                            var tabNameWithoutSpecialChars = tabs[i].Replace(" ", ""); // Remove spaces
+                            var encodedTabName = WebUtility.UrlEncode(tabNameWithoutSpecialChars).Replace("%2F", ""); // Remove %2F
+                            <div id="tab@(encodedTabName)" class="tab-pane fade @(i == 0 ? "show active" : "") px-2 py-2 mt-2">
+                                <div class="row justify-content-center" id="list@(encodedTabName)">
+                                    <!-- Data will be appended here -->
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-12">
+                                <!-- Chart container for Ministries -->
+                                <canvas id="ministriesChart" width="500" height="500"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-6">
+                                <!-- Chart container for Years -->
+                                <canvas id="yearsChart" width="500" height="500"></canvas>
+                            </div>
+
+                            <div class="col-lg-6">
+                                <!-- Chart container for Years -->
+                                <canvas id="yearsAmendmentChart" width="500" height="500"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-12">
+                                <!-- Chart container for Ministries -->
+                                <canvas id="ministriesAmendmentChart" width="500" height="500"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+
+
+@section Scripts {
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        var icons = @Html.Raw(Json.Serialize(icons));
+
+        $(document).ready(function () {
+            // Function to load data from server
+            loadServerData("Ministries", '/Version/GetMinistries');
+            loadServerData("LawCategoriesDivision", '/Version/GetLawCategories');
+            loadServerData("Year", '/Version/GetVersionYears');
+            loadServerData("Volume", '/Version/GetVersionNumbers');
+
+            function loadServerData(tabId, url) {
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    success: function (data) {
+                        var listContainer = $("#list" + tabId);
+                        var tabIndex = getTabIndex(tabId); // Get the index of the current tab
+
+                        // Clear previous content
+                        listContainer.empty();
+
+                        // Add new data to the list
+                        data.forEach(function (item) {
+                            listContainer.append(
+                                '<div class="col-md-3">' +
+                                '<div class="timeline-step mb-2">' +
+                                '<a id="" class="" href="@Url.Action("Index", "DocumentsVersion")?filter=' + encodeURIComponent(item) + '">' +
+                                '<div class="timeline-content customTimelineContent" data-toggle="popover" data-trigger="hover" data-placement="top">' +
+                                '<i class="fa ' + icons[tabIndex] + '"></i> &nbsp; &nbsp;' + item +
+                                '</div>' +
+                                '</a>' +
+                                '</div>' +
+                                '</div>'
+                            );
+                        });
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(xhr.responseText);
+                    }
+                });
+            }
+
+            // Function to get the index of the current tab
+            function getTabIndex(tabId) {
+                switch (tabId) {
+                    case 'Ministries':
+                        return 0;
+                    case 'LawCategoriesDivision':
+                        return 1;
+                    case 'Year':
+                        return 2;
+                    case 'Volume':
+                        return 3;
+                    default:
+                        return 0;
+                }
+            }
+
+
+        });
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            // Load data and create charts for Ministries, Law Categories, and Years
+            loadChartData('ministriesChart', '/Document/GetActCountByMinistriesJson', 'bar', 'Department Acts');
+            loadChartData('yearsChart', '/Document/GetActCountByYearJson', 'line', 'Years Acts');
+            loadChartData('ministriesAmendmentChart', '/Document/GetAmendmentCountByMinistriesJson', 'pie', 'Department Amendments');
+            loadChartData('yearsAmendmentChart', '/Document/GetAmendmentCountByYearJson', 'line', 'Years Amendments');
+
+            // Click event handler for Ministries label
+            $('#ministriesLabel').click(function () {
+                loadChartData('ministriesChart', '/Document/GetActCountByMinistriesJson', 'bar');
+            });
+
+            // Click event handler for Law Categories label
+            $('#lawCategoriesLabel').click(function () {
+                loadChartData('lawCategoriesChart', '/Document/GetActCountByLawCategoryJson', 'bar');
+            });
+
+            // Click event handler for Years label
+            $('#yearsLabel').click(function () {
+                loadChartData('yearsChart', '/Document/GetActCountByYearJson', 'line');
+            });
+
+            function loadChartData(chartId, url, type, heading) {
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    success: function (data) {
+                        var labels = [];
+                        var counts = [];
+                        data.forEach(function (item) {
+                            labels.push(item.label);
+                            counts.push(item.count);
+                        });
+
+                        var ctx = document.getElementById(chartId).getContext('2d');
+
+                        var myChart = new Chart(ctx, {
+                            type: type,
+                            data: {
+                                labels: labels,
+                                datasets: [{
+                                    label: heading,
+                                    data: counts,
+                                    backgroundColor: type === 'bar' ? 'rgba(54, 162, 235, 1)' : 'transparent',
+                                    fill: false,
+                                    backgroundColor: [
+                                        'rgba(255, 99, 132, 1)',
+                                        'rgba(255, 159, 64, 1)',
+                                        'rgba(255, 205, 86, 1)',
+                                        'rgba(75, 192, 192, 1)',
+                                        'rgba(54, 162, 235, 1)',
+                                        'rgba(153, 102, 255, 1)',
+                                        'rgba(201, 203, 256, 1)'
+                                    ],
+
+                                    borderColor: [
+                                        'rgb(255, 99, 132)',
+                                        'rgb(255, 159, 64)',
+                                        'rgb(255, 205, 86)',
+                                        'rgb(75, 192, 192)',
+                                        'rgb(54, 162, 235)',
+                                        'rgb(153, 102, 255)',
+                                        'rgb(201, 203, 207)'
+                                    ],
+                                    borderColor: 'rgb(75, 192, 192)',
+                                    tension: 0.1
+                                }]
+                            },
+                            options: {
+                                scales: {
+                                    y: {
+                                        ticks: {
+                                            // Rotate labels by 45 degrees
+                                            maxRotation: 45,
+                                            minRotation: 45
+                                        }
+                                    }
+                                },
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                datasetFill: false
+                            }
+                        });
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(xhr.responseText);
+                    }
+                });
+            }
+        });
+    </script>
+}

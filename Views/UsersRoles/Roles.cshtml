@@ -1,0 +1,344 @@
+@{
+    ViewData["Title"] = "Roles";
+}
+
+@* @model DRS.Models.Role *@
+
+
+
+@model DRS.Models.CommonModel
+
+<style>
+    .custom-close-button {
+        color: white;
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        background: transparent;
+        border: none;
+        outline: none;
+    }
+
+        .custom-close-button:hover {
+            color: white; 
+        }
+</style>
+
+<div class="wrapper">
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="">Roles</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+                        <li class="breadcrumb-item">Users & Roles</li>
+                        <li class="breadcrumb-item">Roles</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="card">
+
+                    <div id="alertContainer" style="position: fixed; top: 10%; right: 30px; z-index: 1050;"></div>
+
+                    <div class="card-header">
+                        <h3 class="fw-normal card-title">Role Information</h3>
+
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                <i class="fa-minus fas"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- form start -->
+                    <div class="card-body">
+                        <form id="addRoleForm" method="post">
+                            <div class="mb-2 p-3">
+                                <div class="row justify-content-center mb-4">
+                                    <div class="col-md-5 form-group">
+                                        <label for="RoleName">Role Name</label>
+                                        <input type="text" class="form-control" id="RoleName" required
+                                               placeholder="Enter Role Name" asp-for="Roles.RoleName" />
+
+                                        <span asp-validation-for="Roles.RoleName" class="text-danger" id="RoleNameError"></span>
+                                    </div>
+                                </div>
+                                @* @(Model.permissions != null && Model.permissions.UserModule == true ? "checked" : "" *@
+
+                                <div class="row justify-content-center">
+                                    @* <div class="custom-control custom-switch col-md-3 form-group">
+                                        <input type="checkbox" class="custom-control-input" id="userModuleSwitch" name="userModule" />
+                                        <label class="custom-control-label" for="userModuleSwitch">User Module</label>
+                                    </div> *@
+
+                                    <div class="col-md-3 form-group">
+
+                                        <label class="checkbox-inline">
+                                            @Html.CheckBox("userModule", false)
+                                            User Modules
+                                        </label>
+                                    </div>
+
+                                    <div class="col-md-3 form-group">
+                                        <label class="checkbox-inline">
+                                            @Html.CheckBox("documentCategoryModule", false)
+                                            Document Management
+                                        </label>
+                                    </div>
+
+                                    <div class="col-md-3 form-group">
+                                        <label class="checkbox-inline">
+                                            @Html.CheckBox("loginAuditModule", false)
+                                            Login Audit Module
+                                        </label>
+                                    </div>
+
+                                    @*  <div class="custom-control custom-switch col-md-3 form-group">
+                                    <input type="checkbox" class="custom-control-input" id="documentCategoryModuleSwitch" />
+                                    <label class="custom-control-label" for="documentModuleSwitch">Document Category Module</label>
+                                    </div> *@
+
+
+                                    @*  <div class="custom-control custom-switch col-md-3 form-group">
+                                    <input type="checkbox" class="custom-control-input" name="loginAuditModule" />
+                                    <label class="custom-control-label" for="loginAuditModuleSwitch">
+                                    Login Audit
+                                    Module
+                                    </label>
+                                    </div> *@
+                                </div>
+
+                                <div class="row justify-content-center">
+                                    <div class="col-md-3 form-group">
+                                        <label class="checkbox-inline">
+                                            @Html.CheckBox("documentModule", false)
+                                            Document Module
+                                        </label>
+                                    </div>
+
+                                    <div class="col-md-3 form-group">
+                                        <label class="checkbox-inline">
+                                            @Html.CheckBox("searchModule", false)
+                                            Search Module
+                                        </label>
+                                    </div>
+
+                                    <div class="col-md-3 form-group">
+                                        <label class="checkbox-inline">
+                                            @Html.CheckBox("backupModule", false)
+                                            Backup Module
+                                        </label>
+                                    </div>
+                                    @* <div class="custom-control custom-switch col-md-3 form-group">
+                                    <input type="checkbox" class="custom-control-input" />
+                                    <label class="custom-control-label" for="documentModuleSwitch">
+                                    Document
+                                    Module
+                                    </label>
+                                    </div>
+                                    <div class="custom-control custom-switch col-md-3 form-group">
+                                    <input type="checkbox" class="custom-control-input" />
+                                    <label class="custom-control-label" for="searchModuleSwitch">
+                                    Search
+                                    Module
+                                    </label>
+                                    </div>
+                                    <div class="custom-control custom-switch col-md-3 form-group">
+                                    <input type="checkbox" class="custom-control-input" />
+                                    <label class="custom-control-label" for="backupModuleSwitch">
+                                    Backup
+                                    Module
+                                    </label>
+                                    </div> *@
+                                </div>
+
+                                <div class="row justify-content-center">
+
+                                    <div class="col-md-3 form-group">
+                                        <label class="checkbox-inline">
+                                            @Html.CheckBox("addPermissions", false)
+                                            Add Permissions
+                                        </label>
+                                    </div>
+
+                                    <div class="col-md-3 form-group">
+                                        <label class="checkbox-inline">
+                                            @Html.CheckBox("viewPermissions", false)
+                                            View Permissions
+                                        </label>
+                                    </div>
+
+                                    <div class="col-md-3 form-group">
+                                        <label class="checkbox-inline">
+                                            @Html.CheckBox("deletePermissions", false)
+                                            Delete Permissions
+                                        </label>
+                                    </div>
+
+                                    @* <div class="custom-control custom-switch col-md-3 form-group">
+                                    <input type="checkbox" class="custom-control-input" />
+                                    <label class="custom-control-label" for="addPermissions">
+                                    Add Permissions
+                                    </label>
+                                    </div>
+                                    <div class="custom-control custom-switch col-md-3 form-group">
+                                    <input type="checkbox" class="custom-control-input" />
+                                    <label class="custom-control-label" for="viewPermissions">
+                                    View Permissions
+                                    </label>
+                                    </div>
+                                    <div class="custom-control custom-switch col-md-3 form-group">
+                                    <input type="checkbox" class="custom-control-input" />
+                                    <label class="custom-control-label" for="deletePermissions">
+                                    Delete Permissions
+                                    </label>
+                                    </div> *@
+                                </div>
+                            </div>
+
+                            <div class="d-flex justify-content-center p-3">
+                                <button type="submit" class="btn buttonCustom">Add Role & Permissions</button>
+                            </div>
+                        </form>
+                        
+                        <div class="row justify-content-center">
+                            <div class="col-md-6">
+                                <!-- Error Alert -->
+                                @if (TempData["RoleExistsError"] != null)
+                                {
+                                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                                        <strong>An error occurred! </strong> @TempData["RoleExistsError"]
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div id="rolesTable" class="row">
+                @await Html.PartialAsync("_RolesTable", Model)
+            </div>
+
+        </div>
+    </section>
+</div>
+
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        $(document).ready(function () {
+            function reinitializeCollapsibleRows() {
+                $('tr[data-widget="expandable-table"]').click(function () {
+                    var expanded = $(this).attr('aria-expanded') === 'true';
+                    $(this).attr('aria-expanded', !expanded);
+                    $(this).next('.expandable-body').toggle(!expanded);
+                });
+            }
+
+            $('#addRoleForm').submit(function (e) {
+                e.preventDefault();
+
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("Roles", "UsersRoles")',
+                    data: $(this).serialize(),
+                    success: function (response) {
+                        var alertType = response.success ? 'alert-success' : 'alert-danger';
+                        var iconClass = response.success ? 'fa-check-circle' : 'fa-exclamation-circle';
+                        
+
+                        setTimeout(function () {
+                            $alert.fadeOut(500, function () {
+                                $(this).remove();
+                            });
+                        }, 3000);
+
+                        if (response.success) {
+                            var alertHtml = '<div class="alert ' + alertType + ' alert-dismissible alert-slide-in" role="alert" style="position: relative;">' +
+                                '<i class="fas ' + iconClass + ' icon"></i>' +
+                                response.message +
+                                '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' +
+                                '</div>';
+
+                            var $alert = $(alertHtml).appendTo('#alertContainer');
+
+                            setTimeout(function () {
+                                $alert.removeClass('alert-slide-in').addClass('alert-fade-out');
+                                setTimeout(function () {
+                                    $alert.remove();
+                                }, 500);
+                            }, 3000);
+
+                            loadRolesTable();
+                            $('#addRoleForm')[0].reset();
+                        } else {
+                            var alertHtml = '<div class="alert ' + alertType + ' alert-dismissible alert-slide-in" role="alert" style="position: relative;">' +
+                                '<i class="fas ' + iconClass + ' icon"></i>' +
+                                response.message +
+                                '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' +
+                                '</div>';
+
+                            var $alert = $(alertHtml).appendTo('#alertContainer');
+
+                            setTimeout(function () {
+                                $alert.removeClass('alert-slide-in').addClass('alert-fade-out');
+                                setTimeout(function () {
+                                    $alert.remove();
+                                }, 500);
+                            }, 3000);
+                        }
+                    },
+                    error: function () {
+                        var alertHtml = '<div class="alert alert-danger alert-dismissible alert-slide-in" role="alert" style="position: relative;">' +
+                            '<i class="fas fa-exclamation-circle icon"></i>' +
+                            'An error occurred. Please try again.' +
+                            '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' +
+                            '</div>';
+
+                        var $alert = $(alertHtml).appendTo('#alertContainer');
+
+                        setTimeout(function () {
+                            $alert.removeClass('alert-slide-in').addClass('alert-fade-out');
+                            setTimeout(function () {
+                                $alert.remove();
+                            }, 500); 
+                        }, 3000);
+                    }
+                });
+            });
+
+            function loadRolesTable() {
+                $.ajax({
+                    type: 'GET',
+                    url: '@Url.Action("GetRolesTable", "UsersRoles")',
+                    success: function (data) {
+                        $('#rolesTable').html(data);
+                        reinitializeCollapsibleRows();
+                    }
+                });
+            }
+
+            reinitializeCollapsibleRows();
+        });
+
+        document.getElementById('RoleName').addEventListener('input', function () {
+            document.getElementById('RoleNameError').style.display = 'none';
+        });
+    </script>
+}

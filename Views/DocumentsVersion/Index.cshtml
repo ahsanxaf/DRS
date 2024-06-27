@@ -1,0 +1,243 @@
+﻿@{
+    ViewData["Title"] = "Advanced Search";
+}
+@using DRS.Models
+
+@using Newtonsoft.Json
+@using DRS.Extensions
+
+@{
+    // var userPermissions = ViewBag.LoggedInUserPermissions as List<DRS.Models.Permission>;
+    var userPermissionsJson = Context.Session.GetString("LoggedInUserPermissions");
+    var userPermissions = userPermissionsJson == null ? new List<Permission>() : JsonConvert.DeserializeObject<List<Permission>>(userPermissionsJson);
+}
+
+<!-- Content Wrapper. Contains page content -->
+<div class="">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Advanced Search</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="@Url.Action("Index", "Home" )">Home</a></li>
+                        <li class="breadcrumb-item">
+                                Advanced Search
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row advanced-search">
+                <form action="enhanced-results.html">
+                    <div class="col-md-10 offset-md-1">
+                        <div class="row">
+                            @{
+                                var dropdowns = new List<string> { "Law Category", "Ministries", "Year", "Volume" };
+                            }
+
+                            @for (var i = 0; i < dropdowns.Count; i++)
+                            {
+                                <div class="col-3">
+                                    <div class="form-group">
+                                        <label>@dropdowns[i]</label>
+                                        <select id="@dropdowns[i].Replace(" ", "")Filter"
+                                                class="select2 btn dropdown-toggle advanced-seach-filter-dropdown"
+                                                style="width: 100%; color: white;">
+                                            <option value="">All</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </form>
+
+                <form id="searchForm">
+                    <div class="col-md-10 offset-md-1">
+                        <div class="form-group">
+                            <div class="input-group input-group">
+                                <input type="search" id="searchInput" class="form-control form-control" placeholder="Enter your search terms" value="">
+                                <div class="input-group-append ml-2">
+                                    <button type="button" id="searchButton" class="btn buttonCustom btn-default">
+                                        <i class="fa-solid fa-sm fa-magnifying-glass"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+                <div class="col-12">
+                    <div class="card">
+                        <!-- /.card-header -->
+                        <div class="card-body">
+                        <table id="example3" class="table-bordered table table-head-fixed text-nowrap table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>DocID</th>
+                                        <th>Document Title</th>
+                                        <th>Sub-Category</th>
+                                        <th>Version No</th>
+                                        <th>Year</th>
+                                        <th>Volume</th>
+                                        <th>Ministries</th>
+                                        <th>Law Category</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td>@item.VersionId</td>
+
+                                            <td class="table-title">
+                                                <a href="@Url.Action("VersionHistory", "Version", new { VersionId = item.VersionId })">@item.DocumentName</a>
+                                            </td>
+                                            <td class="table-title">@item.SubcategoryName</td> <!-- Corrected property -->
+                                            @if (item.VersionNo == 1)
+                                            {
+                                                <td>Principle</td>
+                                            }
+
+                                            else
+                                            {
+                                                <td>Amendment @(item.VersionNo - 1)</td>
+
+
+                                            }
+                                            <td>@item.Vyear</td>
+                                            <td>@item.Vnumber</td>
+                                            <td class="table-title">@item.DdlMinistries</td>
+                                            <td>@item.DdlLawcategory</td>
+                                            <td class="d-flex justify-content-center gap-4">
+                                                <a asp-controller="Version" asp-action="Details" asp-route-id="@item.VersionId"><i class="fa-solid fa-circle-info fs-6"></i></a>
+                                                @if (userPermissions != null && userPermissions.Any(p => p.AddPermission == true && p.DocumentModule == true))
+                                                {
+                                                    <a asp-controller="Version" asp-action="Edit" asp-route-id="@item.VersionId"><i class="fa-regular fa-pen-to-square fs-6"></i></a>
+                                                }
+                                                @if (userPermissions != null && userPermissions.Any(p =>     p.DeletePermission == true && p.DocumentModule == true))
+                                                {
+                                                    <a asp-controller="Version" asp-action="Delete" asp-route-id="@item.VersionId"><i class="fa-regular fa-trash-can fs-6"></i></a>
+                                                }
+                                                
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+                </div>
+                <!-- /.col -->
+            </div>
+        </div>
+    </section>
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+@section scripts {
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>  
+    <script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+             
+            var table = $('#example3').DataTable({
+                "searching":true,
+                "paging": true,
+                "ordering": false,
+                "order": [[0, 'desc']],
+                "columnDefs": [
+                    { "targets": '_all', "width": "auto" }
+                ]
+            }); 
+
+            $('#searchButton').click(function () {
+                var searchTerm = $('#searchInput').val();
+                table.search(searchTerm).draw();
+            });
+            function getQueryParam(name) {
+                const urlParams = new URLSearchParams(window.location.search);
+                return urlParams.get(name);
+            }
+            // Get selected filter from URL query parameter
+            var selectedFilter = getQueryParam('filter');
+            if (selectedFilter) {
+                // Filter table based on selected filter
+                table.search(selectedFilter).draw();
+            }
+            // Populate Year Filter
+            var uniqueYears = table.column(4).data().unique().sort();
+            var yearOptions = [{ id: '', text: 'All' }];
+            $.each(uniqueYears, function (index, value) {
+                yearOptions.push({ id: value, text: value });
+            });
+
+            // Populate Law Category Filter
+            var uniqueLawCategories = table.column(7).data().unique().sort();
+            var lawCategoryOptions = [{ id: '', text: 'All' }];
+            $.each(uniqueLawCategories, function (index, value) {
+                lawCategoryOptions.push({ id: value, text: value });
+            });
+
+            // Populate Ministries Filter
+            var uniqueMinistries = table.column(6).data().unique().sort();
+            var ministryOptions = [{ id: '', text: 'All' }];
+            $.each(uniqueMinistries, function (index, value) {
+                ministryOptions.push({ id: value, text: value });
+            });
+
+            // Populate Volume Filter
+            var uniqueVolumes = table.column(5).data().unique().sort();
+            var volumeOptions = [{ id: '', text: 'All' }];
+            $.each(uniqueVolumes, function (index, value) {
+                volumeOptions.push({ id: value, text: value });
+            });
+
+            // Initialize Select2 for Law Category Filter
+            $('#LawCategoryFilter').select2({
+                data: lawCategoryOptions
+            }).on('change', function () {
+                var lawCategoryValue = $(this).val();
+                table.column(7).search(lawCategoryValue ? '^' + lawCategoryValue + '$' : '', true, false).draw();
+            });
+
+            // Initialize Select2 for Ministries Filter
+            $('#MinistriesFilter').select2({
+                data: ministryOptions
+            }).on('change', function () {
+                var ministryValue = $(this).val();
+                table.column(6).search(ministryValue ? '^' + ministryValue + '$' : '', true, false).draw();
+            });
+
+            // Initialize Select2 for Year Filter
+            $('#YearFilter').select2({
+                data: yearOptions
+            }).on('change', function () {
+                var yearValue = $(this).val();
+                table.column(4).search(yearValue ? '^' + yearValue + '$' : '', true, false).draw();
+            });
+
+            // Initialize Select2 for Volume Filter
+            $('#VolumeFilter').select2({
+                data: volumeOptions
+            }).on('change', function () {
+                var volumeValue = $(this).val();
+                table.column(5).search(volumeValue ? '^' + volumeValue + '$' : '', true, false).draw();
+            });
+        });
+    </script>
+}

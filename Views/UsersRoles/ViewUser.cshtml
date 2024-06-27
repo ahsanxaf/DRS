@@ -1,0 +1,151 @@
+@{
+    ViewData["Title"] = "View User";
+}
+
+@model DRS.Models.User
+
+<div class="">
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="">User Profile</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+                        <li class="breadcrumb-item"><a asp-controller="UsersRoles" asp-action="Users">Users</a></li>
+                        <li class="breadcrumb-item active">User</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="content">
+        <div class="container-fluid">
+
+            <div class="row gutters-sm">
+                <div class="col-md-4 mb-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex flex-column align-items-center text-center">
+                                <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Admin"
+                                    class="rounded-circle" width="150">
+                                <div class="mt-3">
+                                    <h4>@Model.Name</h4>
+                                    <p class="text-secondary mb-1">@Model.Role?.RoleName</p>
+                                    <p class="text-muted font-size-sm">@Model.City, @Model.State</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-8">
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <h6 class="mb-0 fw-normal">Full Name</h6>
+                                </div>
+                                <div class="col-sm-9 text-secondary">
+                                    @Model.Name
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <h6 class="mb-0 fw-normal">Email</h6>
+                                </div>
+                                <div class="col-sm-9 text-secondary">
+                                    @Model.Email
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <h6 class="mb-0 fw-normal">Phone</h6>
+                                </div>
+                                <div class="col-sm-9 text-secondary">
+                                    @Model.ContactNo
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <h6 class="mb-0 fw-normal">Date of Birth</h6>
+                                </div>
+                                <div class="col-sm-9 text-secondary">
+                                    @Model.Dob?.ToString("yyyy-MM-dd")
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <h6 class="mb-0 fw-normal">Address</h6>
+                                </div>
+                                <div class="col-sm-9 text-secondary">
+                                    @Model.UserAddress
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <h6 class="mb-0 fw-normal">City</h6>
+                                </div>
+                                <div class="col-sm-9 text-secondary">
+                                    @Model.City
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <h6 class="mb-0 fw-normal">State</h6>
+                                </div>
+                                <div class="col-sm-9 text-secondary">
+                                    @Model.State
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <h6 class="mb-0 fw-normal">Pincode</h6>
+                                </div>
+                                <div class="col-sm-9 text-secondary">
+                                    @Model.PinCode
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <h6 class="mb-0 fw-normal">Member ID</h6>
+                                </div>
+                                <div class="col-sm-9 text-secondary">
+                                    @Model.MemberId
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <h6 class="mb-0 fw-normal">Account Status</h6>
+                                </div>
+                                <div class="col-sm-9 text-secondary">
+                                    @Model.AccountStatus
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <a class="btn buttonCustom"
+                                        href="@Url.Action("EditUser", new { userId = Model.UserId })">Edit</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

@@ -1,0 +1,151 @@
+@model DRS.Models.Document
+
+@{
+    ViewData["Title"] = "Details";
+}
+@using Newtonsoft.Json
+@using DRS.Extensions
+
+@{
+    // var userPermissions = ViewBag.LoggedInUserPermissions as List<DRS.Models.Permission>;
+    var userPermissionsJson = Context.Session.GetString("LoggedInUserPermissions");
+    var userPermissions = userPermissionsJson == null ? new List<Permission>() : JsonConvert.DeserializeObject<List<Permission>>(userPermissionsJson);
+}
+
+<div class="wrapper">
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="">Document Details</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+                        <li class="breadcrumb-item">Document</li>
+                        <li class="breadcrumb-item"><a asp-controller="Document" asp-action="Index">All Documents</a>
+                        </li>
+                        <li class="breadcrumb-item">@Html.DisplayFor(model => model.DocTitle)</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+        <!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-end pb-4 gap-4">
+                            @if (userPermissions != null && userPermissions.Any(p => p.AddPermission == true && p.DocumentModule == true))
+                            {
+                                <a asp-action="Edit" asp-route-id="@Model?.DocId" class="btn buttonCustom">Edit</a>
+                            }
+                            
+                            <a asp-action="Index" class="btn buttonCustom2">Back to List</a>
+                        </div>
+
+                        <dl class="row">
+                            <dt class="col-sm-4">Document Title</dt>
+                            <dd class="col-sm-8">@Html.DisplayFor(model => model.DocTitle)</dd>
+
+                            <dt class="col-sm-4">Ministries</dt>
+                            <dd class="col-sm-8">@Html.DisplayFor(model => model.DdlMinistries)</dd>
+
+                            <dt class="col-sm-4">Law Category</dt>
+                            <dd class="col-sm-8">@Html.DisplayFor(model => model.DdlLawcategory)</dd>
+
+                            <dt class="col-sm-4">Volume</dt>
+                            <dd class="col-sm-8">@Html.DisplayFor(model => model.Volume)</dd>
+
+                            <dt class="col-sm-4">Volume Page Number</dt>
+                            <dd class="col-sm-8">@Html.DisplayFor(model => model.PageNo)</dd>
+
+                            <dt class="col-sm-4">Year</dt>
+                            <dd class="col-sm-8">@Html.DisplayFor(model => model.Year)</dd>
+
+                            <dt class="col-sm-4">Repealed By</dt>
+                            <dd class="col-sm-8">@Html.DisplayFor(model => model.RepealedBy)</dd>
+
+                            <dt class="col-sm-4">Amendment Principle</dt>
+                            <dd class="col-sm-8">@Html.DisplayFor(model => model.AmdtPrinciple)</dd>
+
+                            <dt class="col-sm-4">Book Number New</dt>
+                            <dd class="col-sm-8">@Html.DisplayFor(model => model.BookNoNew)</dd>
+
+                            <dt class="col-sm-4">Book Number Old</dt>
+                            <dd class="col-sm-8">@Html.DisplayFor(model => model.BookNoOld)</dd>
+
+                            <dt class="col-sm-4">Book Page Number</dt>
+                            <dd class="col-sm-8">@Html.DisplayFor(model => model.BookPageNo)</dd>
+
+                            <dt class="col-sm-4">Gazette Year</dt>
+                            <dd class="col-sm-8">@Html.DisplayFor(model => model.GazetteYear)</dd>
+
+                            <dt class="col-sm-4">Gazette Part</dt>
+                            <dd class="col-sm-8">@Html.DisplayFor(model => model.GazettePart)</dd>
+
+                            <dt class="col-sm-4">Gazette Page Number</dt>
+                            <dd class="col-sm-8">@Html.DisplayFor(model => model.GazettePageNo)</dd>
+
+                            <dt class="col-sm-4">Srono</dt>
+                            <dd class="col-sm-8">@Html.DisplayFor(model => model.Srono)</dd>
+
+                            <dt class="col-sm-4">Sub Department</dt>
+                            <dd class="col-sm-8">@Html.DisplayFor(model => model.SubDepartment)</dd>
+
+                            <dt class="col-sm-4">Status</dt>
+                            <dd class="col-sm-8">@Html.DisplayFor(model => model.Status)</dd>
+
+                            <dt class="col-sm-4">Remarks</dt>
+                            <dd class="col-sm-8">@Html.DisplayFor(model => model.Remarks)</dd>
+
+                            <dt class="col-sm-4">Created Date</dt>
+                            <dd class="col-sm-8">@Html.DisplayFor(model => model.CreatedDate)</dd>
+
+                            <dt class="col-sm-4">Publishing Date</dt>
+                            <dd class="col-sm-8">@Html.DisplayFor(model => model.PublishingDate)</dd>
+
+                            <dt class="col-sm-4">Commencement Date</dt>
+                            <dd class="col-sm-8">@Html.DisplayFor(model => model.CommencementDate)</dd>
+
+                            @* <dt class="col-sm-4">Validity</dt>
+                            <dd class="col-sm-8">@Html.DisplayFor(model => model.Validity)</dd> *@
+
+                            <dt class="col-sm-4">Security Level</dt>
+                            <dd class="col-sm-8">@Html.DisplayFor(model => model.SecurityLevel)</dd>
+
+                            <dt class="col-sm-4">Target Subcategory</dt>
+                            <dd class="col-sm-8">@Html.DisplayFor(model => model.TargetSubCategory)</dd>
+
+                            <dt class="col-sm-4">Target Search Document</dt>
+                            <dd class="col-sm-8">@Html.DisplayFor(model => model.TargetSearchDocument)</dd>
+
+                            <dt class="col-sm-4">Title URL</dt>
+                            <dd class="col-sm-8">@Html.DisplayFor(model => model.TitleUrl)</dd>
+
+                            <dt class="col-sm-4">Latest URL</dt>
+                            <dd class="col-sm-8">@Html.DisplayFor(model => model.LatestUrl)</dd>
+
+                            <dt class="col-sm-4">Rules</dt>
+                            <dd class="col-sm-8">@Html.DisplayFor(model => model.Rules)</dd>
+
+                            <dt class="col-sm-4">Acts</dt>
+                            <dd class="col-sm-8">@Html.DisplayFor(model => model.Acts)</dd>
+
+                            <dt class="col-sm-4">Category</dt>
+                            <dd class="col-sm-8">@Html.DisplayFor(model => model.Category.CategoryId)</dd>
+
+                            <dt class="col-sm-4">Subcategory</dt>
+                            <dd class="col-sm-8">@Html.DisplayFor(model => model.Subcategory.SubcategoryId)</dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+    </section>
+    @*
+    <partial name="_pager" model="@pager" /> *@
+</div>

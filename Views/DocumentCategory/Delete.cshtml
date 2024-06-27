@@ -1,0 +1,28 @@
+@model DRS.Models.DocumentCategory
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<div>
+    <dl class="row">
+        <dt class = "col-md-12">
+            @Html.DisplayNameFor(model => model.CategoryName)
+        </dt>
+        <dd class = "col-md-12">
+            @Html.DisplayFor(model => model.CategoryName)
+        </dd>
+        <dt class = "col-md-12">
+            @Html.DisplayNameFor(model => model.CategoryDetails)
+        </dt>
+        <dd class = "col-md-12">
+            @Html.DisplayFor(model => model.CategoryDetails)
+        </dd>
+        <dt class = "col-md-12">
+            @Html.DisplayNameFor(model => model.CreatedDate)
+        </dt>
+        <dd class = "col-md-12">
+            @Html.DisplayFor(model => model.CreatedDate)
+        </dd>
+    </dl>
+</div>

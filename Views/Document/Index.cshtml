@@ -1,0 +1,241 @@
+@model IEnumerable<DRS.Models.Document>
+
+@{
+    ViewData["Title"] = "All Documents";
+}
+
+@using Newtonsoft.Json
+@using DRS.Extensions
+
+@{
+    // var userPermissions = ViewBag.LoggedInUserPermissions as List<DRS.Models.Permission>;
+    var userPermissionsJson = Context.Session.GetString("LoggedInUserPermissions");
+    var userPermissions = userPermissionsJson == null ? new List<Permission>() : JsonConvert.DeserializeObject<List<Permission>>(userPermissionsJson);
+}
+
+
+<div class="wrapper">
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="">All Documents</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="@Url.Action("Index", "Home")">Home</a></li>
+                        <li class="breadcrumb-item">Document</li>
+                        <li class="breadcrumb-item">All Documents</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+        <!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                @if (userPermissions != null && userPermissions.Any(p => p.AddPermission == true && p.DocumentModule == true))
+                {
+                    <div class="pb-4 d-flex justify-content-end">
+                        <a asp-controller="Document" asp-action="Create" class="nav-link">
+                            <button type="" class="btn buttonCustom2"><i class="fa-solid fa-plus"></i>&nbsp; Add New Document</button>
+                        </a>
+                    </div>
+                }
+                <div class="card">
+                    <!-- Modal for adding the latest URL -->
+                    <div class="modal fade" id="addLatestUrlModal" tabindex="-1" role="dialog" aria-labelledby="addLatestUrlModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="addLatestUrlModalLabel">Add Latest URL</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <form id="addLatestUrlForm" method="post">
+                                    <div class="modal-body">
+                                        <div class="form-group">
+                                            <label for="latestUrl">Latest URL:</label>
+                                            <input type="text" class="form-control" id="latestUrl" name="latestUrl" required>
+                                        </div>
+                                        <input type="hidden" id="documentId" name="documentId" value="">
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn buttonCustom2" data-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn buttonCustom">Save</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <table id="example2" class="table-bordered table table-head-fixed text-nowrap table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Doc ID</th>
+                                    <th>Document Title</th>
+                                    <th>Status</th>
+                                    <th>Year</th>
+                                    <th>Sub-Category</th>
+                                    <th>Remarks</th>
+                                    <th>Actions</th>
+
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>@Html.DisplayFor(modelItem => item.DocId)</td>
+
+                                        <td class="table-title">
+                                            <a href="@Url.Action("VersionHistory","Version", new { id = item.DocId })">
+                                                @Html.DisplayFor(modelItem
+                                                         => item.DocTitle)
+                                            </a>
+                                        </td>
+                                        <td class="table-column-small">@Html.DisplayFor(modelItem => item.Status)</td>
+                                        <td class="table-column-small">@Html.DisplayFor(modelItem => item.Year)</td>
+                                        <td class="table-column-medium">@Html.DisplayFor(modelItem => item.Subcategory.SubcategoryName)</td>
+                                        <td class="table-column-medium">@Html.DisplayFor(modelItem => item.Remarks)</td>
+                                        <td class="d-flex justify-content-center">
+                                            <div class="btn-group">
+                                                <button type="button" class="btn buttonCustom dropdown-toggle"
+                                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <i class="fas fa-align-justify"></i>
+                                                </button>
+                                                <div class="dropdown-menu dropdown-menu-right">
+
+                                                    @if (userPermissions != null && userPermissions.Any(p => p.AddPermission == true && p.DocumentModule == true))
+                                                    {
+                                                        <a class="dropdown-item"
+                                                           href="@Url.Action("Edit", new { id = item.DocId })">Edit
+                                                       </a>
+                                                    }
+                                                    @if (userPermissions != null && userPermissions.Any(p => p.DocumentModule == true || ((p.AddPermission ?? false) || (p.ViewPermission ?? false))))
+                                                    {
+                                                        <a class="dropdown-item"
+                                                           href="@Url.Action("Details", new { id = item.DocId })">Details
+                                                       </a>
+                                                    }
+                                                    @if (userPermissions != null && userPermissions.Any(p => p.AddPermission == true && p.DocumentModule == true))
+                                                    {
+                                                        <a class="dropdown-item"
+                                                           href="@Url.Action("UploadAmendment", new { id = item.DocId })">
+                                                            Upload
+                                                            Amendment
+                                                        </a>
+                                                    }
+
+                                                    @if (userPermissions != null && userPermissions.Any(p => p.AddPermission == true && p.DocumentModule == true))
+                                                    {
+                                                        <a class="dropdown-item"
+                                                           href="@Url.Action("Index","Amendment", new { id = item.DocId })">
+                                                              Amendment History
+                                                        </a>
+                                                    }
+
+                                                    
+                                                    @if (userPermissions != null && userPermissions.Any(p => p.AddPermission == true && p.DocumentModule == true))
+                                                    {
+                                                        <a class="dropdown-item add-latest-url" href="#" data-toggle="modal"
+                                                           data-target="#addLatestUrlModal" data-docid="@item.DocId">
+                                                            Add Latest
+                                                            Url
+                                                        </a>
+                                                    }
+
+                                                    @if (userPermissions != null && userPermissions.Any(p => p.DeletePermission == true && p.DocumentModule == true))
+                                                    {
+                                                        <a class="dropdown-item" href="@Url.Action("Delete", new { id = item.DocId })">Delete</a>
+                                                    }
+                                                    
+
+                                                    <a class="dropdown-item" href="@Url.Action("Download", new { id = item.DocId })">Download</a>
+                                                </div>
+                                            </div>
+                                        </td>
+
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+    </section>
+    @* <partial name="_pager" model="@pager" /> *@
+</div>
+
+@section Scripts {
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js"></script>
+    <script>
+        $(document).ready(function () {
+
+            $('.add-latest-url').click(function () {
+                var docId = $(this).data('docid');
+                $('#documentId').val(docId);
+                $('#addLatestUrlModal').modal('show');
+
+            });
+
+            // Submit form using AJAX
+            $('#addLatestUrlForm').submit(function (e) {
+                // e.preventDefault();
+                var formData = $(this).serialize();
+                $.ajax({
+                    url: '@Url.Action("AddLatestUrl", "Document")',
+                    type: 'POST',
+                    data: formData,
+                    success: function (data) {
+                        // If the URL is added successfully, close the modal and update the document list
+                        $('#addLatestUrlModal').modal('hide');
+                        // You may need to update the document list here
+                    },
+                    error: function (xhr, status, error) {
+                        // Handle error
+                        console.error(xhr.responseText);
+                    }
+                });
+            });
+
+
+            // Function to save the table state to session storage
+            function saveTableState() {
+                var data = table.state();
+                sessionStorage.setItem('DataTables_example1', JSON.stringify(data));
+            }
+
+            // Load the table state from session storage
+            function loadTableState() {
+                var state = sessionStorage.getItem('DataTables_example1');
+                if (state) {
+                    table.state.clear(); // Clear any existing state
+                    table.state(JSON.parse(state)); // Load the state from session storage
+                }
+            }
+
+            // Call the function to load the table state when initializing
+            loadTableState();
+
+            // Add event listeners for specific interactions to save the state
+            table.on('order.dt search.dt page.dt', function () {
+                saveTableState();
+            });
+
+
+        });
+    </script>
+}

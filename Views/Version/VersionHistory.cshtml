@@ -1,0 +1,453 @@
+@model List<DRS.Models.Version>
+
+
+@{
+    ViewBag.Title = "Version History";
+    bool hasOrdinanceDocuments = ViewBag.HasOrdinanceDocuments != null ? (bool)ViewBag.HasOrdinanceDocuments : false;
+    SelectList ordinanceDocuments = ViewBag.OrdinanceDocuments as SelectList;
+    bool hasRulesDocuments = ViewBag.HasRulesDocuments != null ? (bool)ViewBag.HasRulesDocuments : false;
+    SelectList rulesDocuments = ViewBag.RulesDocuments as SelectList;
+}
+
+@using Newtonsoft.Json
+@using DRS.Extensions
+
+@{
+    // var userPermissions = ViewBag.LoggedInUserPermissions as List<DRS.Models.Permission>;
+    var userPermissionsJson = Context.Session.GetString("LoggedInUserPermissions");
+    var userPermissions = userPermissionsJson == null ? new List<Permission>() : JsonConvert.DeserializeObject<List<Permission>>(userPermissionsJson);
+}
+
+<style>
+    .timeline-steps::-webkit-scrollbar-track {
+        -webkit-box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.1);
+        background-color: #F5F5F5;
+        border-radius: 10px;
+    }
+
+    .timeline-steps::-webkit-scrollbar {
+        height: 10px;
+        background-color: #F5F5F5;
+    }
+
+    .timeline-steps::-webkit-scrollbar-thumb {
+        border-radius: 10px;
+        -webkit-box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.1);
+        background-color: #d9be65;
+    }
+
+    .btn-circle {
+        font-weight: 400;
+        content: "";
+        background-color: #d9be65;
+        display: inline-block;
+        height: 3rem;
+        width: 3rem;
+        min-width: 3rem;
+        border-radius: 6.25rem;
+        border-color: #01411c;
+    }
+
+    .btn-circle:hover {
+        background-color: #01411c;
+        border-color: #d9be65;
+        color: #fff;
+    }
+
+    .timeline-steps {
+        display: flex;
+        overflow-x: scroll;
+        flex-wrap: nowrap;
+    }
+
+    .timeline-steps .timeline-step {
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        margin: 1rem;
+    }
+
+    .timeline-steps .timeline-step:not(:last-child):after {
+        content: "";
+        display: block;
+        border-top: .25rem dotted #d9be65;
+        width: 1.8125rem;
+        position: absolute;
+        left: 9.0rem;
+        top: 1.3125rem;
+    }
+
+    .timeline-steps .timeline-step:not(:first-child):before {
+        content: "";
+        display: block;
+        border-top: .25rem dotted #d9be65;
+        width: 1.8125rem;
+        position: absolute;
+        right: 9.0rem;
+        top: 1.3125rem;
+    }
+
+
+    .timeline-steps .timeline-content {
+        width: 10rem;
+        text-align: center;
+    }
+
+    .btn-circle.active {
+        background-color: #01411c;
+        color: #d9be65;
+        font-weight: 400;
+    }
+
+    .customTreeView {
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+        color: #333;
+        margin-left: -300px;
+    }
+</style>
+
+<div class="wrapper">
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="">Version History</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+                        <li class="breadcrumb-item">Documents</li>
+                        <li class="breadcrumb-item"><a asp-controller="Document" asp-action="Index">All Documents</a></li>
+                        @* <li class="breadcrumb-item">@ViewBag.DocumentTitle</li> *@
+                        <li class="breadcrumb-item">Version History</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+        <!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title"><span class="fw-bold">&nbsp; @ViewBag.DocumentTitle</span></h3>
+                    </div>
+                    <div class="card-body">
+
+                        <div class="row">
+                        @if (hasOrdinanceDocuments)
+                    {
+                        <div class="col-md-3">
+                            <select id="ordinanceDocuments" name="ordinanceDocuments" class="form-control" onchange="loadVersion(this.value)">
+                                <option value="">Select an Ordinance</option>
+                                @foreach (var doc in ordinanceDocuments)
+                                {
+                                     <option value="@doc.Value">@doc.Text</option>
+
+                                }
+                            </select>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="col-md-1">
+                        </div>
+                    }  @if (hasRulesDocuments)
+                    {
+                        <div class="col-md-3">
+                            <select id="rulesDocuments" name="rulesDocuments" class="form-control" onchange="loadVersion(this.value)">
+                                <option value="">Select an Rules</option>
+                                @foreach (var doc in rulesDocuments)
+                                {
+                                     <option value="@doc.Value">@doc.Text</option>
+
+                                }
+                            </select>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="col-md-1">
+                        </div>
+                    }
+
+                            <div class="d-flex justify-content-center">
+                                <h6>
+                                    <span class="fw-lighter">P = Principle </span>&nbsp; &nbsp;
+                                    <span class="fw-lighter">A = Amendment </span>&nbsp; &nbsp;
+                                    <span class="fw-lighter">Digit = Amendment Number</span>
+                                </h6>
+                            </div>
+                        </div>
+                    
+                        <div class="row">
+                            <div class="timeline-steps">
+                                @foreach (var version in Model)
+                                {
+                                    @if (version.VersionId != null)
+                                    {
+                                        <div class="timeline-step">
+                                            <button type="button"
+                                                class="btn btn-circle version-btn @((ViewBag.SelectedVersionId == version.VersionId ? "active" : ""))"
+                                                data-doc-url="@version.VersionId">
+                                                @{
+                                                    if (version.VersionNo == 1)
+                                                    {
+                                                        @:P
+                                                    }
+                                                    else
+                                                    {
+                                                        @:A @(version.VersionNo - 1)
+                                                    }
+                                                }
+                                            </button>
+                                            <label style="color: black;">@version.PublishingDate?.ToString("dd-MM-yyyy")</label>
+                                            <div class="timeline-content" data-toggle="popover" data-trigger="hover"
+                                                data-placement="top">
+                                                    <!-- Add timeline content here -->
+                                            </div>
+                                        </div>
+                                    }
+                                }
+                            </div>
+                        </div>
+
+                        <div class="pt-4 d-flex justify-content-center gap-4">
+                            <a href="@ViewBag.LatestUrl" target="_blank" class="btn buttonCustom">Updated Copy</a>
+                            <a asp-action="Index" asp-controller="DocumentsVersion" class="btn buttonCustom2">Back to Search</a>
+                        </div>
+                    </div>
+                </div>
+                
+                
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <!-- Document viewer -->
+                            <div class="col-8">
+                                <embed id="documentViewer" src="" style="width: 100%; height: 100vh !important;" />
+                            </div>
+
+                            <div class="col-4">
+                                <div class="card bg-light">
+                                    <div class="card-body">
+                                        @* <h3 class="card-title title-center" id="documentname"></h3>
+                                        <br><br> *@
+                                        <ul class="list-unstyled">
+                                            <li><strong>Version Type:</strong><span id="versionType"></span></li>
+                                            <li><strong>Number:</strong> <span id="versionNumber"></span></li>
+                                            <li><strong>Gazette Year:</strong> <span id="versionGazetteYear"></span></li>
+                                            <li><strong>Gazette Part:</strong> <span id="versionGazettePart"></span></li>
+                                            <li><strong>Gazette Page:</strong> <span id="versionGazettePage"></span></li>
+                                            <li><strong>Status:</strong> <span id="versionStatus"></span></li>
+                                            <li><strong>Publishing Date:</strong> <span id="versionPublishingDate"></span></li>
+                                            <li><strong>Commencement Date:</strong> <span id="versionCommencementDate"></span></li>
+                                            <li><strong>Uploaded Date:</strong> <span id="versionUploadDate"></span></li>
+                                            <li><strong>Remarks:</strong> <span id="versionRemarks"></span></li>
+                                        </ul>
+                                        <div class="d-flex justify-content-center gap-4">
+                                            <a href="" id="versionDocUrl" class="btn buttonCustom"><i class="fa-solid fa-download"></i>&nbsp; Download</a>
+                                            @if (userPermissions != null && userPermissions.Any(p => p.AddPermission == true && p.DocumentModule == true))
+                                            {
+                                                <a asp-action="Edit" asp-route-id="" id="edit" class="btn buttonCustom2"><i class="fa-regular fa-pen-to-square"></i>&nbsp; Edit</a>
+                                            }
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="card bg-light">
+                                    <div class="card-header collapsed">
+                                        <div class="card-tools">
+                                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                                <i class="fa-plus fas"></i>
+                                            </button>
+                                        </div>
+                                        <h3 class="card-title">Ministries</h3>
+                                    </div>
+                                    <div class="card-body collapse">
+                                        <select class="select2Ministries"></select>
+                                    </div>
+                                </div>
+
+                                <div class="card bg-light">
+                                    <div class="card-header collapsed">
+                                        <div class="card-tools">
+                                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                                <i class="fa-plus fas"></i>
+                                            </button>
+                                        </div>
+                                        <h3 class="card-title">Law Categories</h3>
+                                    </div>
+                                    <div class="card-body collapse">
+                                        <select class="select2LawCategories"></select>
+                                    </div>
+                                </div>
+
+                                <div class="card bg-light">
+                                    <div class="card-header collapsed">
+                                        <div class="card-tools">
+                                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                                <i class="fa-plus fas"></i>
+                                            </button>
+                                        </div>
+                                        <h3 class="card-title">Version Number</h3>
+                                    </div>
+                                    <div class="card-body collapse">
+                                        <select class="select2VersionNumber"></select>
+                                    </div>
+                                </div>
+
+                                <div class="card bg-light">
+                                    <div class="card-header collapsed">
+                                        <div class="card-tools">
+                                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                                <i class="fa-plus fas"></i>
+                                            </button>
+                                        </div>
+                                        <h3 class="card-title">Version Year</h3>
+                                    </div>
+                                    <div class="card-body collapse">
+                                        <select class="select2VersionYear"></select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        @section Scripts {
+
+            <script>
+        $(document).ready(function () {
+            $('#ordinanceDocuments').change(function () {
+                var selectedId = $(this).val();
+                if (selectedId) {
+                    // Redirect to the version history page with the selected ID
+                    window.location.href = '/Version/VersionHistory?id=' + selectedId;
+
+                }
+            }); $('#rulesDocuments').change(function () {
+                var selectedId = $(this).val();
+                if (selectedId) {
+                    // Redirect to the version history page with the selected ID
+                    window.location.href = '/Version/VersionHistory?id=' + selectedId;
+                }
+            });
+            // Load the first version when the page loads
+            var docId = @Html.Raw(Json.Serialize(ViewBag.DocId));
+            var versionId = @Html.Raw(Json.Serialize(ViewBag.VersionId));
+            loadVersion(docId, versionId);
+     
+          
+            // Find the button corresponding to the initial version number and add 'active' class
+            $('.version-btn[data-doc-url="' + versionId + '"]').addClass('active');
+
+            // Click event handler for version buttons
+            $('.version-btn').click(function () {
+                // Remove active class from all buttons
+                $('.version-btn').removeClass('active');
+                // Add active class to the clicked button
+                $(this).addClass('active');
+                // Fetch version details for the clicked version
+                var versionId = $(this).data('doc-url');
+                loadVersion(docId, versionId);
+            });
+
+            function loadVersion(docId, versionId) {
+                $.ajax({
+                    url: '/Version/GetVersionData', // Correct URL to your controller action
+                    type: 'GET',
+                    data: { docId: docId, versionId: versionId }, // Send both DocId and VersionId
+                    success: function (data) {
+                        // Log the received data for debugging
+                
+                        // $('#LatestUrl').attr('href', data.docUrl);
+
+                        $('#edit').attr('href', '/Version/Edit/' + data.versionId);
+                        // Set the document name
+                        $('#documentname').text(data.documentName || 'N/A');
+                        var versionType = (data.versionNo == 1) ? "Principle" : "Amendment #" + (parseInt(data.versionNo) - 1);
+                        $('#versionType').text(versionType);
+                        $('#versionNumber').text(data.vnumber || 'N/A');
+                        $('#versionGazetteYear').text(data.vgazetteYear || 'N/A');
+                        $('#versionGazettePart').text(data.vgazettePart || 'N/A');
+                        $('#versionGazettePage').text(data.vgazettePage || 'N/A');
+                        $('#versionStatus').text(data.vstatus || 'N/A');
+                        $('#versionPublishingDate').text(data.publishingDate ? new Date(data.publishingDate).toLocaleDateString('en-US') : 'N/A');
+                        $('#versionCommencementDate').text(data.commencementDate ? new Date(data.commencementDate).toLocaleDateString('en-US') : 'N/A');
+                        $('#versionUploadDate').text(data.uploadDate || 'N/A');
+                        $('#versionRemarks').text(data.remarks || 'N/A');
+                        $('#versionDocUrl').attr('href', data.docUrl || '#');
+                        $('#documentViewer').attr('src', data.docUrl || '#');
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(xhr.responseText);
+                    }
+                });
+            }
+        });
+      
+                // Remove the redundant jQuery inclusion
+            </script>
+
+            <script>
+                $(document).ready(function () {
+                    // Initialize select2 fields for each tab
+                    // Function to handle tab clicks
+            var selectMinistries = $('.card:contains("Ministries") .select2Ministries');
+            var selectLawCategories = $('.card:contains("Law Categories") .select2LawCategories');
+            var selectVersionNumber = $('.card:contains("Version Number") .select2VersionNumber');
+            var selectVersionYear = $('.card:contains("Version Year") .select2VersionYear');
+
+            initializeSelect2(selectMinistries, '/Version/GetMinistries', 'Select a ministry');
+            initializeSelect2(selectLawCategories, '/Version/GetLawCategories', 'Select a law category');
+            initializeSelect2(selectVersionNumber, '/Version/GetVersionNumbers', 'Select a version number');
+            initializeSelect2(selectVersionYear, '/Version/GetVersionYears', 'Select a version year');
+
+            function initializeSelect2(select2Field, actionUrl, placeholderText) {
+                // Load data for select2 field
+                $.ajax({
+                    url: actionUrl,
+                    type: 'GET',
+                    success: function (data) {
+                        console.log('Data for ' + actionUrl + ': ', data); // Log the returned data
+                        select2Field.empty(); // Clear existing options
+                        select2Field.append('<option value=""></option>'); // Add placeholder option with empty value
+                        $.each(data, function (index, item) {
+                            select2Field.append('<option value="' + item + '">' + item + '</option>');
+                        });
+                          select2Field.on('change', function () {
+                var filter = $(this).val();
+                // Redirect to DocumentsVersion page with selected filter as a query parameter
+                window.location.href = '@Url.Action("Index", "DocumentsVersion")?filter=' + encodeURIComponent(filter);
+            });
+                        select2Field.select2({
+                            placeholder: placeholderText, // Set placeholder for search bar
+                            allowClear: true // Allow the user to clear the selection
+                        }); // Initialize select2 after populating options
+                        // Set the width of select2 dropdown to match the width of its parent container
+                        select2Field.parent().find('.select2-container').css('width', '100%');
+
+                        // Add event listener for change event
+                       
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error for ' + actionUrl + ': ', xhr.responseText); // Log the error message
+                    }
+                });
+            }
+                  
+                });
+            </script>
+        }

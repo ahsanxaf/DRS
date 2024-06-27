@@ -1,0 +1,245 @@
+@model DRS.Models.CommonModel
+@{
+    ViewData["Title"] = "Law Categories";
+}
+
+@using Newtonsoft.Json
+@using DRS.Extensions
+
+@{
+    // var userPermissions = ViewBag.LoggedInUserPermissions as List<DRS.Models.Permission>;
+    var userPermissionsJson = Context.Session.GetString("LoggedInUserPermissions");
+    var userPermissions = userPermissionsJson == null ? new List<Permission>() : JsonConvert.DeserializeObject<List<Permission>>(userPermissionsJson);
+}
+
+<!-- Content Wrapper. Contains page content -->
+<div class="">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row flex-container mb-2 align-items-center">
+                <div class="col-sm-6">
+                    <h1 class="">Law Categories</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="@Url.Action("Index", "Home" )">Home</a></li>
+                        <li class="breadcrumb-item">Document Management</li>
+                        <li class="breadcrumb-item">Law Categories</li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                @if (userPermissions != null && userPermissions.Any(p => p.AddPermission == true && p.DocumentModule == true))
+                {
+                    <div class="d-flex justify-content-end pb-4">
+                        <button class="button btn buttonCustom2 align-items-center justify-content-center gap-2 d-flex" data-toggle="modal" data-target="#createModal">
+                            <i class="fa-solid fa-plus"></i>New Law Category
+                        </button>
+                    </div>
+                }
+                
+                <div class="card">
+                    <!-- Create Modal -->
+                    <div class="modal fade" id="createModal" tabindex="-1" role="dialog"
+                         aria-labelledby="createModalTitle" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="createModalTitle">Law Category Details</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+
+                                <form asp-action="Create" asp class="col-md-12 justify-content-center">
+                                    <div class="modal-body">
+                                        <div class="form-row">
+                                            <div class="form-group col-md-12">
+                                                <label asp-for="lawCategory.LawCategoryName"
+                                                       class="control-label">Name</label>
+                                                <input asp-for="lawCategory.LawCategoryName"
+                                                       class="form-control" />
+                                                <span asp-validation-for="lawCategory.LawCategoryName"
+                                                      class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="modal-footer d-flex gap-4">
+                                        <a type="button" class="btn buttonCustom" data-dismiss="modal">Cancel</a>
+                                        <input type="submit" value="Create" class="btn buttonCustom" />
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <table id="example2" class="table-bordered table table-head-fixed text-nowrap table-striped">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Name
+                                </th>
+                                <th>
+                                    Actions
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.lawCategories)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.LawCategoryName)
+                                    </td>
+                                    <td class="d-flex justify-content-center align-items-center gap-4">
+                                        @if (userPermissions != null && userPermissions.Any(p => p.AddPermission == true && p.DocumentModule == true))
+                                        {
+                                            <a asp-action="Edit" asp-route-id="@item.LawCategoryId">   <i class="fa-regular fa-pen-to-square"></i></a>
+                                        }
+
+                                        <a class="button" data-toggle="modal" data-target="#infoModal-@item.LawCategoryId">
+                                            <i class="fa-solid fa-circle-info"></i>
+                                        </a>
+
+                                        @if (userPermissions != null && userPermissions.Any(p => p.DeletePermission == true && p.DocumentModule == true))
+                                        {
+                                            <a class="button" data-toggle="modal"
+                                               data-target="#deleteModal-@item.LawCategoryId">
+                                                <i class="fa-regular fa-trash-can"></i>
+                                            </a>
+                                        }
+                                        
+
+                                        <!-- Delete Modal -->
+                                        <div class="modal fade" id="deleteModal-@item.LawCategoryId" tabindex="-1"
+                                             role="dialog" aria-labelledby="deleteModalTitle" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="deleteModalTitle">
+                                                            Delete Law
+                                                            Category
+                                                        </h5>
+                                                        <button type="button" class="close" data-dismiss="modal"
+                                                                aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <partial name="Delete" model="item" />
+                                                    </div>
+                                                    <div class="modal-footer d-flex gap-4">
+                                                        <a type="button" class="btn buttonCustom" data-dismiss="modal">Cancel</a>
+                                                        <form asp-action="Delete">
+                                                            <input type="hidden" asp-for="@item.LawCategoryId" />
+                                                            <input type="submit" value="Delete" class="btn btn-danger" asp-route-id="@item.LawCategoryId" asp-action="Delete" asp-controller="LawCategory" />
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Edit Modal -->
+                                        <div class="modal fade" id="editModal-@item.LawCategoryId" tabindex="-1"
+                                             role="dialog" aria-labelledby="editModalTitle" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="editModalTitle">
+                                                            Edit Law
+                                                            Category
+                                                        </h5>
+                                                        <button type="button" class="close" data-dismiss="modal"
+                                                                aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+
+                                                    <form asp-action="Edit" class="col-md-12 justify-content-center">
+                                                        <div class="modal-body">
+                                                            <div class="form-row">
+                                                                <div asp-validation-summary="ModelOnly" class="text-danger">
+                                                                </div>
+                                                                <input type="hidden" asp-for="@item.LawCategoryId" />
+                                                                <div class="form-group col-md-12">
+                                                                    <label asp-for="@item.LawCategoryName"
+                                                                           class="control-label">Law Category</label>
+                                                                    <input asp-for="@item.LawCategoryName"
+                                                                           class="form-control" />
+                                                                    <span asp-validation-for="@item.LawCategoryName"
+                                                                          class="text-danger"></span>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="form-row">
+                                                                <div class="form-group col-md-12">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer d-flex gap-4">
+                                                            <a type="button" class="btn buttonCustom" data-dismiss="modal">Cancel</a>
+                                                            <input type="submit" value="Save" class="btn buttonCustom" />
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Info Modal -->
+                                        <div class="modal fade" id="infoModal-@item.LawCategoryId" tabindex="-1"
+                                             role="dialog" aria-labelledby="infoModalTitle" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="infoModalTitle">
+                                                            Law
+                                                            Category Details
+                                                        </h5>
+                                                        <button type="button" class="close" data-dismiss="modal"
+                                                                aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="row">
+                                                            <dl class="col-12 gap-2">
+                                                                <dt class="col-md-6">
+                                                                    Law Category
+                                                                </dt>
+                                                                <dd class="col-md-6">
+                                                                    @item.LawCategoryName
+                                                                </dd>
+                                                            </dl>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <a type="button" class="btn buttonCustom" data-dismiss="modal">Cancel</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

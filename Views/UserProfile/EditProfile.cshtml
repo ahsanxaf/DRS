@@ -1,0 +1,206 @@
+@{
+    ViewData["Title"] = "Edit Profile";
+}
+
+@model DRS.Models.User
+
+<div class="">
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="">Edit Profile</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="@Url.Action("Index", "Home")">Home</a></li>
+                        <li class="breadcrumb-item">UserProfile</li>
+                        <li class="breadcrumb-item">Edit Profile</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="card">
+                    <div id="alertContainer" style="position: fixed; top: 10%; right: 30px; z-index: 1050;"></div>
+                    <!-- form start -->
+                    <form method="post" id="editUserProfile">
+                        <div class="card-body">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                            <h4 class="fw-light pb-3">Profile Information</h4>
+                            <div class="mb-2 p-3">
+                                <div class="row">
+                                    <div class="col-md-8 form-group">
+                                        <label for="fullName">Full Name</label>
+                                        <input type="text" class="form-control" id="fullName"
+                                               placeholder="Enter Full Name" asp-for="Name" />
+                                        <span asp-validation-for="Name" class="text-danger" id="fullNameError"></span>
+                                    </div>
+
+                                    <div class="col-md-4 form-group">
+                                        <label for="role">Role</label>
+                                        <input type="text" class="form-control" id="role"
+                                               asp-for="Role.RoleName" readonly />
+                                        <span asp-validation-for="RoleId" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-4 form-group">
+                                        <label for="dob" class="form-label">Date of Birth</label>
+                                        <input type="date" class="form-control" id="dob" asp-for="Dob" />
+                                        <span asp-validation-for="Dob" class="text-danger"></span>
+                                    </div>
+
+                                    <div class="col-md-4 form-group">
+                                        <label for="contactNo">Contact Number</label>
+                                        <input type="tel" class="form-control" id="contactNo"
+                                               placeholder="Enter Contact Number" asp-for="ContactNo" />
+                                        <span asp-validation-for="ContactNo" class="text-danger"></span>
+                                    </div>
+
+                                    <div class="col-md-4 form-group">
+                                        <label for="email">Email</label>
+                                        <input type="email" class="form-control" id="email"
+                                               placeholder="Enter email" asp-for="Email" />
+                                        <span asp-validation-for="Email" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-4 form-group">
+                                        <label for="city">City</label>
+                                        <input type="text" class="form-control" id="city"
+                                               placeholder="Enter city" asp-for="City" />
+                                        <span asp-validation-for="City" class="text-danger"></span>
+                                    </div>
+
+                                    <div class="col-md-4 form-group">
+                                        <label for="state">State</label>
+                                        <input type="text" class="form-control" id="state"
+                                               placeholder="Enter state" asp-for="State" />
+                                        <span asp-validation-for="State" class="text-danger"></span>
+                                    </div>
+
+                                    <div class="col-md-4 form-group">
+                                        <label for="pincode">Pincode</label>
+                                        <input type="text" class="form-control" id="pincode"
+                                               placeholder="Enter pincode" asp-for="PinCode" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mb-2 p-3">
+                                <div class="row">
+                                    <div class="col-md-6 form-group">
+                                        <label for="employeeId">Employee ID</label>
+                                        <input type="text" class="form-control" id="employeeId"
+                                               placeholder="Enter employee ID" asp-for="MemberId" readonly/>
+                                        <span asp-validation-for="MemberId" class="text-danger"></span>
+                                    </div>
+
+                                    <div class="col-md-6 form-group">
+                                        <label for="accountStatus">Account Status</label>
+                                        <input type="text" class="form-control" id="accountStatus"
+                                               asp-for="AccountStatus" readonly />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="d-flex justify-content-center mb-2 p-3">
+                                <button type="submit" class="btn buttonCustom w-100">Save Profile</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        $(document).ready(function () {
+
+            $('#editUserProfile').submit(function (e) {
+                e.preventDefault();
+
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("EditProfile", "UserProfile")',
+                    data: $(this).serialize(),
+                    success: function (response) {
+                        var alertType = response.success ? 'alert-success' : 'alert-danger';
+                        var iconClass = response.success ? 'fa-check-circle' : 'fa-exclamation-circle';
+
+
+                        setTimeout(function () {
+                            $alert.fadeOut(500, function () {
+                                $(this).remove();
+                            });
+                        }, 3000);
+
+                        if (response.success) {
+                            var alertHtml = '<div class="alert ' + alertType + ' alert-dismissible alert-slide-in" role="alert" style="position: relative;">' +
+                                '<i class="fas ' + iconClass + ' icon"></i>' +
+                                response.message +
+                                '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' +
+                                '</div>';
+
+                            var $alert = $(alertHtml).appendTo('#alertContainer');
+
+                            setTimeout(function () {
+                                $alert.removeClass('alert-slide-in').addClass('alert-fade-out');
+                                setTimeout(function () {
+                                    $alert.remove();
+                                }, 500);
+                            }, 3000);
+
+                            //$('#editUserProfile').trigger("reset");
+                        } else {
+                            var alertHtml = '<div class="alert ' + alertType + ' alert-dismissible alert-slide-in" role="alert" style="position: relative;">' +
+                                '<i class="fas ' + iconClass + ' icon"></i>' +
+                                response.message +
+                                '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' +
+                                '</div>';
+
+                            var $alert = $(alertHtml).appendTo('#alertContainer');
+
+                            setTimeout(function () {
+                                $alert.removeClass('alert-slide-in').addClass('alert-fade-out');
+                                setTimeout(function () {
+                                    $alert.remove();
+                                }, 500);
+                            }, 3000);
+                        }
+                    },
+                    error: function () {
+                        var alertHtml = '<div class="alert alert-danger alert-dismissible alert-slide-in" role="alert" style="position: relative;">' +
+                            '<i class="fas fa-exclamation-circle icon"></i>' +
+                            'An error occurred. Please try again.' +
+                            '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' +
+                            '</div>';
+
+                        var $alert = $(alertHtml).appendTo('#alertContainer');
+
+                        setTimeout(function () {
+                            $alert.removeClass('alert-slide-in').addClass('alert-fade-out');
+                            setTimeout(function () {
+                                $alert.remove();
+                            }, 500);
+                        }, 3000);
+                    }
+                });
+            });
+
+        });
+
+    </script>
+}

@@ -1,0 +1,30 @@
+﻿@model List<DRS.Controllers.BackupViewModel>
+
+<div class="card">
+    <div class="card-body">
+        <table id="example2" class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>Backup File</th>
+                    <th>Date Created</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var backup in Model)
+                {
+                    <tr>
+                        <td>@backup.FileName</td>
+                        <td>@backup.DateCreated?.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                        <td>
+                            <form method="get" action="/Backup/DownloadBackup">
+                                <input type="hidden" name="fileName" value="@backup.FileName" />
+                                <button type="submit" class="btn"><span class="fa fa-download"></span></button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

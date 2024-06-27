@@ -1,0 +1,169 @@
+@model DRS.Models.Version
+
+@{
+ViewData["Title"] = "Upload Ammendment";
+}
+
+<div class="wrapper">
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="">Upload Ammendment</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+                        <li class="breadcrumb-item">Document</li>
+                        <li class="breadcrumb-item"><a asp-controller="Document" asp-action="Index">All Documents</a></li>
+                        <li class="breadcrumb-item">Upload Ammendment</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+        <!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="pb-2 d-flex justify-content-end">
+                            <a asp-controller="Document" asp-action="Index" class="nav-link">
+                                <button type="" class="btn buttonCustom2">Back to Documents</button>
+                            </a>
+                        </div>
+
+                        <form asp-action="Create" enctype="multipart/form-data">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                            <div class="form-group">
+
+                                <input type="hidden" asp-for="DocId" class="form-control" />
+                                <span asp-validation-for="DocId" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="DocumentName" class="control-label">Document Title:</label>
+                                <input asp-for="DocumentName" class="form-control" required/>
+                                <span asp-validation-for="DocumentName" class="text-danger"></span>
+                            </div>
+
+                            <div class="row">
+                              @*   <div class="col-3">
+                                    <div class="form-group">
+                                        <label asp-for="Vyear" class="control-label">Year:</label>
+                                        <input asp-for="Vyear" class="form-control" />
+                                        <span asp-validation-for="Vyear" class="text-danger"></span>
+                                    </div>
+                                </div> *@
+                                <div class="col-4">
+                                    <div class="form-group">
+                                        <label asp-for="Vnumber" class="control-label">Number:</label>
+                                        <input asp-for="Vnumber" class="form-control" required />
+                                        <span asp-validation-for="Vnumber" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="control-label">Publishing Date</label>
+                                    <div class="form-group">
+                                        <input type="date" asp-for="PublishingDate"
+                                            class="form-control" placeholder="Publishing Date" required/>
+                                        <span asp-validation-for="PublishingDate" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="control-label">Commencement Date </label>
+                                    <div class="form-group">
+                                        <input type="date" asp-for="CommencementDate"
+                                            class="form-control"
+                                            placeholder="Commencement Date" />
+                                        <span asp-validation-for="CommencementDate" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-4">
+                                    <div class="form-group">
+                                        <label asp-for="VgazetteYear" class="control-label">Gazette Year:</label>
+                                        <input asp-for="VgazetteYear" class="form-control" required/>
+                                        <span asp-validation-for="VgazetteYear" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="form-group">
+                                        <label asp-for="VgazettePart" class="control-label">Gazette Part:</label>
+                                        <input asp-for="VgazettePart" class="form-control" />
+                                        <span asp-validation-for="VgazettePart" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="form-group">
+                                        <label asp-for="VgazettePage" class="control-label">Gazette Page #:</label>
+                                        <input asp-for="VgazettePage" class="form-control" />
+                                        <span asp-validation-for="VgazettePage" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-4">
+                                    <div class="form-group">
+                                        <label asp-for="VdocNature" class="control-label">Document Nature:</label>
+                                        <select asp-for="VdocNature" class="form-control">
+                                            <option value="Amendment">Amendment</option>
+                                            <option value="Ordinance">Ordinance</option>
+                                        </select>
+                                        <span asp-validation-for="VdocNature" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="form-group">
+                                        <label asp-for="ValidityDate" class="control-label">Validity Date:</label>
+                                        <input asp-for="ValidityDate" type="date" class="form-control"
+                                            placeholder="Validity Date" />
+                                        <span asp-validation-for="ValidityDate" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="form-group">
+                                        <label asp-for="Vstatus" class="control-label">Status:</label>
+                                        <select asp-for="Vstatus" class="form-control">
+                                            <option value="Enforced">Enforced</option>
+                                            <option value="Repealed">Repealed</option>
+                                        </select>
+                                        <span asp-validation-for="Vstatus" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="Remarks" class="control-label">Remarks:</label>
+                                <input asp-for="Remarks" class="form-control" placeholder="Remarks" />
+                                <span asp-validation-for="Remarks" class="text-danger"></span>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label asp-for="DocUrl" class="form-label">Choose Document for Upload</label>
+                                        <input required type="file" class="form-control" id="fileUpload" name="DocFile" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-center pt-3">
+                                <input type="submit" value="Create" class="btn buttonCustom" />
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+    </section>
+    @*
+    <partial name="_pager" model="@pager" /> *@
+</div>
+
+@section Scripts {
+@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

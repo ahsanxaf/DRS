@@ -1,0 +1,91 @@
+@model DRS.Models.Amendment
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Amendment</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="DocId" class="control-label"></label>
+                <input asp-for="DocId" class="form-control" />
+                <span asp-validation-for="DocId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="VersionNo" class="control-label"></label>
+                <input asp-for="VersionNo" class="form-control" />
+                <span asp-validation-for="VersionNo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Sections" class="control-label"></label>
+                <input asp-for="Sections" class="form-control" />
+                <span asp-validation-for="Sections" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Snumber" class="control-label"></label>
+                <input asp-for="Snumber" class="form-control" />
+                <span asp-validation-for="Snumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AmendmentType" class="control-label"></label>
+                <input asp-for="AmendmentType" class="form-control" />
+                <span asp-validation-for="AmendmentType" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="BookNo" class="control-label"></label>
+                <input asp-for="BookNo" class="form-control" />
+                <span asp-validation-for="BookNo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Entry" class="control-label"></label>
+                <input asp-for="Entry" class="form-control" />
+                <span asp-validation-for="Entry" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SubSection" class="control-label"></label>
+                <input asp-for="SubSection" class="form-control" />
+                <span asp-validation-for="SubSection" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Clause" class="control-label"></label>
+                <input asp-for="Clause" class="form-control" />
+                <span asp-validation-for="Clause" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SubClause" class="control-label"></label>
+                <input asp-for="SubClause" class="form-control" />
+                <span asp-validation-for="SubClause" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AmendedContent" class="control-label"></label>
+                <input asp-for="AmendedContent" class="form-control" />
+                <span asp-validation-for="AmendedContent" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="UpdatedBy" class="control-label"></label>
+                <input asp-for="UpdatedBy" class="form-control" />
+                <span asp-validation-for="UpdatedBy" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

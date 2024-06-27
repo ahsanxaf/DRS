@@ -1,0 +1,40 @@
+@model DRS.Models.Subcategory
+
+@{
+    ViewData["Title"] = "Create";
+}
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="CategoryId" class="control-label"></label>
+                <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.CategoryId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="SubcategoryName" class="control-label"></label>
+                <input asp-for="SubcategoryName" class="form-control" />
+                <span asp-validation-for="SubcategoryName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SubcategoryDetails" class="control-label"></label>
+                <input asp-for="SubcategoryDetails" class="form-control" />
+                <span asp-validation-for="SubcategoryDetails" class="text-danger"></span>
+            </div>
+
+            <!-- Ensure that CreatedDate is correctly bound and formatted -->
+            <input type="hidden" asp-for="CreatedDate" value="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss.fff")" />
+
+            <div class="form-group d-flex justify-content-center gap-4">
+                <a type="button" class="btn buttonCustom2" data-dismiss="modal">Cancel</a>
+                <input type="submit" value="Create" class="btn buttonCustom" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

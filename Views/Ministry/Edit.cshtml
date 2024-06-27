@@ -1,0 +1,69 @@
+@model DRS.Models.Ministry
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<div class="">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Edit Ministry</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="@Url.Action("Index", "Home" )">Home</a></li>
+                        <li class="breadcrumb-item">
+                            Document Management
+                        </li>
+                        <li class="breadcrumb-item">
+                            Ministries
+                        </li>
+                        <li class="breadcrumb-item">
+                            Edit
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="d-flex justify-content-end">
+                            <a asp-controller="Ministry" asp-action="Index" class="btn buttonCustom2">
+                                Back to Ministries List
+                            </a>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <form asp-action="Edit">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <input type="hidden" asp-for="MinistryId" />
+                            <div class="form-group">
+                                <label asp-for="MinistryName" class="control-label"></label>
+                                <input asp-for="MinistryName" class="form-control" />
+                                <span asp-validation-for="MinistryName" class="text-danger"></span>
+                            </div>
+                            <div class="form-group d-flex justify-content-center">
+                                <input type="submit" value="Save" class="btn buttonCustom" />
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

@@ -1,0 +1,21 @@
+@model DRS.Models.LawCategory
+
+@{
+    ViewData["Title"] = "Create";
+}
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="LawCategoryName" class="control-label"></label>
+                <input asp-for="LawCategoryName" class="form-control" />
+                <span asp-validation-for="LawCategoryName" class="text-danger"></span>
+            </div>
+            <div class="form-group d-flex justify-content-center gap-4">
+                <a type="button" class="btn buttonCustom2" data-dismiss="modal">Cancel</a>
+                <input type="submit" value="Create" class="btn buttonCustom" />
+            </div>
+        </form>
+    </div>
+</div>
